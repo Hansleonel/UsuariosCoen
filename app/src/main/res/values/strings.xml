@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">UnaSolaFuerza</string>
+    <string name="app_name">#UnaSolaFuerza</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -18,6 +18,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="accept">Aceptar</string>
+    <string name="register">Registrar</string>
     <string name="user">User</string>
     <string name="ubication">Ubicacion</string>
     <string name="message">Ingrese el Mensaje</string>
@@ -27,4 +28,5 @@
         completions."
     </string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_splash">SplashActivity</string>
 </resources>

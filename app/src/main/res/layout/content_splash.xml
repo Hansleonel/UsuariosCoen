@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
+    android:gravity="center"
+    tools:context="com.example.codehans.usuarioscoen.SplashActivity">
+
+    <TextView
+        android:id="@+id/nameApp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        android:textSize="40sp" />
+
+    <TextView
+        android:layout_marginStart="190dp"
+        android:layout_marginLeft="190dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="COEN"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:textSize="20sp" />
+
+
+</LinearLayout>

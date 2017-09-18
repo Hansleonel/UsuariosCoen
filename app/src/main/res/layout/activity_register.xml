@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.codehans.usuarioscoen.RegisterActivity">
+
+
+    <EditText
+        android:id="@+id/edtV_DNI"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="20dp"
+        android:inputType="number"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:gravity="center"
+        android:drawableRight="@drawable/ic_account_box_black_24dp"
+        android:drawableTint="@color/colorPrimaryDark"
+        android:hint="DNI" />
+
+    <EditText
+        android:id="@+id/edtV_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:hint="Usuario"
+        android:drawableRight="@drawable/ic_account_circle_black_24dp"
+        android:drawableEnd="@drawable/ic_account_circle_black_24dp"
+        android:drawableTint="@color/colorPrimaryDark"
+        android:textAlignment="center" />
+
+    <EditText
+        android:id="@+id/edtV_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:hint="Password"
+        android:drawableRight="@drawable/ic_security_black_24dp"
+        android:drawableTint="@color/colorPrimaryDark"
+        android:inputType="textPassword"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/btn_registrar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorPrimaryDark"
+        android:text="Registrar"
+        android:textColor="@android:color/white" />
+
+</LinearLayout>

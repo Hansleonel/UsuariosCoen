@@ -1,5 +1,6 @@
 package com.example.codehans.usuarioscoen;
 
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,7 +21,12 @@ public class ReceiptActivity extends AppCompatActivity {
         btn_accept_alert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v,"ACEPTADO",Snackbar.LENGTH_LONG).show();
+                Snackbar.make(v,"ACEPTADO",Snackbar.LENGTH_LONG).setAction("MAPA", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                }).show();
             }
         });
     }
