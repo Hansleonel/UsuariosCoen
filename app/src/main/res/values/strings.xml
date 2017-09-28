@@ -29,4 +29,5 @@
     </string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_splash">SplashActivity</string>
+    <string name="save">Guardar</string>
 </resources>

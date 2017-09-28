@@ -7,52 +7,52 @@
     android:orientation="vertical"
     tools:context="com.example.codehans.usuarioscoen.RegisterActivity">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        app:civ_border_color="@color/colorPrimaryDark"
+        app:civ_border_width="1dp" />
 
     <EditText
         android:id="@+id/edtV_DNI"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginStart="20dp"
-        android:inputType="number"
-        android:layout_marginTop="40dp"
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:gravity="center"
-        android:drawableRight="@drawable/ic_account_box_black_24dp"
-        android:drawableTint="@color/colorPrimaryDark"
-        android:hint="DNI" />
-
-    <EditText
-        android:id="@+id/edtV_username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_marginEnd="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:background="@drawable/edt_cstm"
+        android:hint="DNI"
+        android:inputType="number"
+        android:textAlignment="center" />
+
+    <EditText
+        android:id="@+id/edtV_username"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edt_cstm"
         android:hint="Usuario"
-        android:drawableRight="@drawable/ic_account_circle_black_24dp"
-        android:drawableEnd="@drawable/ic_account_circle_black_24dp"
-        android:drawableTint="@color/colorPrimaryDark"
         android:textAlignment="center" />
 
     <EditText
         android:id="@+id/edtV_password"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_marginEnd="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:hint="Password"
-        android:drawableRight="@drawable/ic_security_black_24dp"
-        android:drawableTint="@color/colorPrimaryDark"
+        android:background="@drawable/edt_cstm"
+        android:hint="Pass"
         android:inputType="textPassword"
         android:textAlignment="center" />
 
@@ -65,7 +65,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:background="@color/colorPrimaryDark"
+        android:background="@drawable/btn_cstm"
         android:text="Registrar"
         android:textColor="@android:color/white" />
 

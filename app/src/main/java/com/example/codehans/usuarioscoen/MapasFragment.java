@@ -24,6 +24,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -92,7 +93,10 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback {
         CameraUpdate camupd = CameraUpdateFactory.newLatLngZoom(new LatLng(-9.189967, -75.015152), 5);
         MgoogleMap.moveCamera(camupd);
         //todo:AGREGAR MARCADORES Y PERSONALIZARLOS
-        MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(-12.046373, -77.042754)).title("Lima"));
+        //todo:PODEMOS AGRUPAR MARKERS POR CANTIDAD DENTRO DE UNA ZONA
+        MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(-12.046373, -71.042754)).title("Lima"));
+        MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(-14.246373, -76.242754)).title("Lima").icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher)));
+
     }
 
     @Override

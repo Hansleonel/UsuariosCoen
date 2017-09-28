@@ -6,9 +6,11 @@
 
     <!-- TODO: RECUERDA QUE CADA VEZ QUE MODIFIQUES EL TIPO DE LAYOUT
      TODO: DEBES DE CAMBIAR DICHO TIPO EN EL CODIGO-->
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/RecViewConsejos"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="compartir" />
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>
