@@ -1,6 +1,7 @@
 package com.example.codehans.usuarioscoen;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -30,6 +31,10 @@ public class MainActivity extends AppCompatActivity
         Intent in = getIntent();
         String TOKEN = in.getStringExtra("TOKENLOGIN");
         //Toast.makeText(getApplicationContext()," "+TOKEN,Toast.LENGTH_LONG).show();
+        SharedPreferences prefs = getSharedPreferences("TOKENSHAREFILE", MODE_PRIVATE);
+        String A = prefs.getString("TOKENSTRING", "ERROR");
+        Toast.makeText(getApplicationContext(), " " + A, Toast.LENGTH_LONG).show();
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

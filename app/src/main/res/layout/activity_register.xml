@@ -40,6 +40,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/edt_cstm"
         android:hint="Usuario"
+        android:inputType="textEmailAddress"
         android:textAlignment="center" />
 
     <EditText

@@ -97,6 +97,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback {
         MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(-12.046373, -71.042754)).title("Lima"));
         MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(-14.246373, -76.242754)).title("Lima").icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher)));
 
+
     }
 
     @Override

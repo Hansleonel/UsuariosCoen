@@ -1,6 +1,8 @@
 package com.example.codehans.usuarioscoen;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -38,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText edtV_user;
     private EditText edtV_password;
 
+    Context context = this;
+
     public static final String URL = "http://10.24.9.6:8080/coen/api/authenticate";
 
     @Override
@@ -46,6 +50,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("shared", context.MODE_PRIVATE);
 
         txtv_tittle = (TextView) findViewById(R.id.lbl_tittle);
         Typeface m = Typeface.createFromAsset(getAssets(), "fonts/serious.ttf");
@@ -98,6 +104,11 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("AAAAAAA", response.get("id_token") + " i am queen");
                             TOKEN = response.get("id_token").toString();
                             //Toast.makeText(LoginActivity.this,"EL TOKEN ES "+TOKEN,Toast.LENGTH_LONG).show();
+                            SharedPreferences prefs = getSharedPreferences("TOKENSHAREFILE", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putString("TOKENSTRING", TOKEN);
+                            editor.commit();
+
                             Intent i = new Intent(LoginActivity.this, MainActivity.class);
                             i.putExtra("TOKENLOGIN", TOKEN);
                             startActivity(i);

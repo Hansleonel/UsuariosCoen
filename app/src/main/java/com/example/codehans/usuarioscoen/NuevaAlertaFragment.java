@@ -3,6 +3,7 @@ package com.example.codehans.usuarioscoen;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
@@ -54,8 +55,8 @@ import java.util.Map;
 public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     public static final String TAG = "LOCALIZACION";
-    public static final String URL = "http://10.25.35.229:9000/api/reporte-ciudadanos";
-    public static final String TOKEN = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOLFJPTEVfVVNFUiIsImV4cCI6MTUwODQ0MTI2MX0.EMyUJ77RpKLyB_xKOurLDcq7wYZpj8d11APDGxctujHdXqi8gHpsiqenUj1VtHNKdS-IiOwXmXWfTx0hjDfxwg";
+    public static final String URL = "http://10.24.9.6:8080/coen/api/reporte-ciudadanos";
+    //public static final String TOKEN = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOLFJPTEVfVVNFUiIsImV4cCI6MTUwODQ0MTI2MX0.EMyUJ77RpKLyB_xKOurLDcq7wYZpj8d11APDGxctujHdXqi8gHpsiqenUj1VtHNKdS-IiOwXmXWfTx0hjDfxwg";
     private static final int PETICION_PERMISO_LOCALIZACION = 101;
     private EditText editText_ubicacion;
     private EditText editText_message;
@@ -67,8 +68,7 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
 
     public String LATI = " ";
     public String LONGI = " ";
-    String a = " ";
-
+    String TOKEN = " ";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,7 +79,6 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
 
         editText_ubicacion = (EditText) relativeLayout.findViewById(R.id.edtV_Ubicacion);
         editText_message = (EditText) relativeLayout.findViewById(R.id.edtV_Message);
-        editText_message.setText(a);
         //spinner_tipoE = (Spinner) relativeLayout.findViewById(R.id.cmbx_TipoE);
         //spinner_tipoC = (Spinner) relativeLayout.findViewById(R.id.cmbx_TipoC);
         btn_alert = (Button) relativeLayout.findViewById(R.id.btn_accept_alert);
@@ -99,6 +98,11 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
 
         //String[] concecuency = new String[]{"Puente Caido","Colegio Colapsado","Plaza Inundada"};
         //ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_dropdown_item,concecuency);
+
+        //todo uso de sharedpreference para la recuperacion del token
+        SharedPreferences pref = getActivity().getSharedPreferences("TOKENSHAREFILE", Context.MODE_PRIVATE);
+        TOKEN = pref.getString("TOKENSTRING", "ERROR");
+        Toast.makeText(getContext(), " " + TOKEN, Toast.LENGTH_LONG).show();
 
 
         apiClient = new GoogleApiClient.Builder(getContext())
@@ -137,7 +141,7 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Log.d("AAAAAAA", response.get("id") + " i am queen");
+                            Log.d("RESPONSE CORRECTO", response.get("id") + " i am queen");
                             Toast.makeText(getContext(), "LA ALERTA HA SIDO ENVIADA", Toast.LENGTH_LONG).show();
                             //Snackbar.make(v,"CONFIRMA TU PASSWORD CON",Snackbar.LENGTH_INDEFINITE).setAction("LOGIN",new View.OnClickListener(){
                             //  @Override
@@ -152,7 +156,7 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("EEEEEE", "Error: " + error.toString());
+                VolleyLog.d("eRRor Response", "Error: " + error.toString());
                 Toast.makeText(getContext(), "" + error.toString(), Toast.LENGTH_LONG).show();
             }
         }) {
@@ -164,7 +168,7 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
-                headers.put("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOLFJPTEVfVVNFUiIsImV4cCI6MTUwODQ0OTE0M30.S1AgWYiiP1lEhhpHUjfOscxUYEcry-S3PiRYJUbULVqk7Z_wgRcTiKEK0XHb8CxJxi07QB_Ob73HwfTH-TMALg");
+                headers.put("Authorization", "Bearer " + TOKEN);
                 return headers;
             }
         };
