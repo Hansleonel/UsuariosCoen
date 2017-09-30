@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,8 +41,10 @@ import com.google.android.gms.location.LocationServices;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -55,7 +59,7 @@ import java.util.Map;
 public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     public static final String TAG = "LOCALIZACION";
-    public static final String URL = "http://10.24.9.6:8080/coen/api/reporte-ciudadanos";
+    public static final String URL = "http://10.24.9.6:8080/sigem/api/reporte-ciudadanos";
     //public static final String TOKEN = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOLFJPTEVfVVNFUiIsImV4cCI6MTUwODQ0MTI2MX0.EMyUJ77RpKLyB_xKOurLDcq7wYZpj8d11APDGxctujHdXqi8gHpsiqenUj1VtHNKdS-IiOwXmXWfTx0hjDfxwg";
     private static final int PETICION_PERMISO_LOCALIZACION = 101;
     private EditText editText_ubicacion;
@@ -126,9 +130,9 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
             js.put("descripcion", message);
             js.put("fecha", "2017-08-19");
             //js.put("longitud", 222.1);
-            js.put("longitud", lat);
+            js.put("latitud", lat);
             //js.put("latitud", 22.2);
-            js.put("latitud", lng);
+            js.put("longitud", lng);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -141,7 +145,7 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Log.d("RESPONSE CORRECTO", response.get("id") + " i am queen");
+                            Log.d("RESPONSE CORRECTO", response.get("idRepCiudadano") + " i am queen");
                             Toast.makeText(getContext(), "LA ALERTA HA SIDO ENVIADA", Toast.LENGTH_LONG).show();
                             //Snackbar.make(v,"CONFIRMA TU PASSWORD CON",Snackbar.LENGTH_INDEFINITE).setAction("LOGIN",new View.OnClickListener(){
                             //  @Override
@@ -198,8 +202,26 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
     }
 
     private void updateUI(Location location) {
+
+
         if (location != null) {
-            editText_ubicacion.setText("Latitud: " + String.valueOf(location.getLatitude()) + " Longitud" + String.valueOf(location.getLongitude()));
+            Geocoder geocoder = new Geocoder(getContext());
+            String address = " ";
+            String city = " ";
+            try {
+                List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                //List<Address> addressList = geocoder.getFromLocation(-12.0651300, -75.2048600, 1);
+                address = addressList.get(0).getCountryName();
+                city = addressList.get(0).getLocality();
+                Log.d(TAG, "updateUI: COUNTRY CODE" + addressList.get(0).getCountryCode());
+                Log.d(TAG, "updateUI: CIUDAD " + city);
+                Log.d(TAG, "updateUI: " + addressList.get(0).getMaxAddressLineIndex());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //editText_ubicacion.setText("Latitud: " + String.valueOf(location.getLatitude()) + " Longitud" + String.valueOf(location.getLongitude()));
+            editText_ubicacion.setText(" " + address);
             LATI = String.valueOf(location.getLongitude());
             LONGI = String.valueOf(location.getLatitude());
         } else {
@@ -217,5 +239,12 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
 
         Log.e(TAG, "SE AH PRODUCIDO UN ERROR CON PLAY SERVICES");
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        apiClient.stopAutoManage(getActivity());
+        apiClient.disconnect();
     }
 }

@@ -30,4 +30,5 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="save">Guardar</string>
+    <string name="URL_BASE">http://10.25.23.228:8088/sigem-0.0.1-SNAPSHOT/api</string>
 </resources>

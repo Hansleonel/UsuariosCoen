@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
 
     Context context = this;
 
-    public static final String URL = "http://10.24.9.6:8080/coen/api/authenticate";
+    public static final String URL = "http://10.24.9.6:8080/sigem/api/authenticate";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

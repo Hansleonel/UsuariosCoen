@@ -20,6 +20,8 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(getApplicationContext(), " " + A, Toast.LENGTH_LONG).show();
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.constrMaster_L, new NuevaAlertaFragment()).commit();
+                fab.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -102,8 +105,10 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             fragmentManager.beginTransaction().replace(R.id.constrMaster_L, new MapasFragment()).commit();
+            fab.setVisibility(View.VISIBLE);
         } else if (id == R.id.nav_gallery) {
             fragmentManager.beginTransaction().replace(R.id.constrMaster_L, new NuevaAlertaFragment()).commit();
+            fab.setVisibility(View.INVISIBLE);
         } else if (id == R.id.nav_slideshow) {
             fragmentManager.beginTransaction().replace(R.id.constrMaster_L, new HerramientasFragment()).commit();
         } else if (id == R.id.nav_manage) {
