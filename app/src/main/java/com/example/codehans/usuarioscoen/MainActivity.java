@@ -35,20 +35,20 @@ public class MainActivity extends AppCompatActivity
         //Toast.makeText(getApplicationContext()," "+TOKEN,Toast.LENGTH_LONG).show();
         SharedPreferences prefs = getSharedPreferences("TOKENSHAREFILE", MODE_PRIVATE);
         String A = prefs.getString("TOKENSTRING", "ERROR");
-        Toast.makeText(getApplicationContext(), " " + A, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), " " + A, Toast.LENGTH_LONG).show();
 
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Enviar una alerta Nueva", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.constrMaster_L, new NuevaAlertaFragment()).commit();
-                fab.setVisibility(View.INVISIBLE);
-            }
-        });
+        //fab = (FloatingActionButton) findViewById(R.id.fab);
+        //fab.setOnClickListener(new View.OnClickListener() {
+        //@Override
+        //          public void onClick(View view) {
+        //Snackbar.make(view, "Enviar una alerta Nueva", Snackbar.LENGTH_LONG)
+        //      .setAction("Action", null).show();
+        //FragmentManager fragmentManager = getSupportFragmentManager();
+        //fragmentManager.beginTransaction().replace(R.id.constrMaster_L, new NuevaAlertaFragment()).commit();
+        //fab.setVisibility(View.INVISIBLE);
+        //  }
+        //});
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -105,14 +105,15 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             fragmentManager.beginTransaction().replace(R.id.constrMaster_L, new MapasFragment()).commit();
-            fab.setVisibility(View.VISIBLE);
+            //fab.setVisibility(View.VISIBLE);
         } else if (id == R.id.nav_gallery) {
             fragmentManager.beginTransaction().replace(R.id.constrMaster_L, new NuevaAlertaFragment()).commit();
-            fab.setVisibility(View.INVISIBLE);
+            //fab.setVisibility(View.INVISIBLE);
         } else if (id == R.id.nav_slideshow) {
             fragmentManager.beginTransaction().replace(R.id.constrMaster_L, new HerramientasFragment()).commit();
         } else if (id == R.id.nav_manage) {
             fragmentManager.beginTransaction().replace(R.id.constrMaster_L, new ContactosFragment()).commit();
+            //fab.setVisibility(View.INVISIBLE);
         } else if (id == R.id.nav_share) {
             fragmentManager.beginTransaction().replace(R.id.constrMaster_L, new CompartirFragment()).commit();
         } else if (id == R.id.nav_send) {

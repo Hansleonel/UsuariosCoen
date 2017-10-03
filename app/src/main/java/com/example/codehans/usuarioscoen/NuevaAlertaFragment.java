@@ -106,7 +106,7 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
         //todo uso de sharedpreference para la recuperacion del token
         SharedPreferences pref = getActivity().getSharedPreferences("TOKENSHAREFILE", Context.MODE_PRIVATE);
         TOKEN = pref.getString("TOKENSTRING", "ERROR");
-        Toast.makeText(getContext(), " " + TOKEN, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(), " " + TOKEN, Toast.LENGTH_LONG).show();
 
 
         apiClient = new GoogleApiClient.Builder(getContext())
