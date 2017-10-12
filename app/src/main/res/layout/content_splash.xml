@@ -9,7 +9,11 @@
     android:gravity="center"
     tools:context="com.example.codehans.usuarioscoen.SplashActivity">
 
-    <TextView
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_icon"/>
+    <!--<TextView
         android:id="@+id/nameApp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +30,7 @@
         android:text="COEN"
         android:textColor="@android:color/white"
         android:textStyle="bold"
-        android:textSize="20sp" />
+        android:textSize="20sp" /> -->
 
 
 </LinearLayout>

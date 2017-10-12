@@ -26,9 +26,9 @@ public class SplashActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
 
-        Tittle = (TextView) findViewById(R.id.nameApp);
-        Typeface m = Typeface.createFromAsset(getAssets(), "fonts/serious.ttf");
-        Tittle.setTypeface(m);
+        //Tittle = (TextView) findViewById(R.id.nameApp);
+        //Typeface m = Typeface.createFromAsset(getAssets(), "fonts/serious.ttf");
+        //Tittle.setTypeface(m);
 
         new Handler().postDelayed(new Runnable() {
             @Override

@@ -176,7 +176,6 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
                 return headers;
             }
         };
-
         // Adding request to request queue
         Volley.newRequestQueue(getContext()).add(jsonObjReq);
     }
@@ -213,6 +212,7 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
                 //List<Address> addressList = geocoder.getFromLocation(-12.0651300, -75.2048600, 1);
                 address = addressList.get(0).getCountryName();
                 city = addressList.get(0).getLocality();
+                Log.d(TAG, "updateUI: COUNTRY " + address);
                 Log.d(TAG, "updateUI: COUNTRY CODE" + addressList.get(0).getCountryCode());
                 Log.d(TAG, "updateUI: CIUDAD " + city);
                 Log.d(TAG, "updateUI: " + addressList.get(0).getMaxAddressLineIndex());
@@ -221,7 +221,8 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
             }
 
             //editText_ubicacion.setText("Latitud: " + String.valueOf(location.getLatitude()) + " Longitud" + String.valueOf(location.getLongitude()));
-            editText_ubicacion.setText(" " + address);
+            editText_ubicacion.setText(" " + address+" "+city);
+            Toast.makeText(getContext(), "DIRECCION " + address, Toast.LENGTH_LONG).show();
             LATI = String.valueOf(location.getLongitude());
             LONGI = String.valueOf(location.getLatitude());
         } else {

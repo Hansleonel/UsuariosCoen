@@ -35,7 +35,8 @@ public class ContactosFragment extends Fragment {
     private ImageView contact05;
     private ImageView centerContact;
     private FloatingActionButton floatingActionButton_contacts;
-    private String urlcontact, urlcontact2, urlcontact3, urlcontact4, urlcontact5, urlcenter;
+    private String urlcontact = "";
+    private String urlcontact2, urlcontact3, urlcontact4, urlcontact5, urlcenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,7 +60,7 @@ public class ContactosFragment extends Fragment {
         });
 
 
-        urlcontact = "http://globalcdn03.mundotkm.com/2017/02/6-3.jpg";
+        urlcontact = "";
         Glide.with(getContext())
                 .load(urlcontact)
                 .crossFade()
@@ -104,11 +105,16 @@ public class ContactosFragment extends Fragment {
         contact01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Glide.with(getContext())
-                        .load(urlcontact)
-                        .crossFade()
-                        .centerCrop()
-                        .into(centerContact);
+                if (urlcontact.isEmpty()) {
+                    //Toast.makeText(getContext(), "ENVIAR", Toast.LENGTH_LONG).show();
+
+                } else {
+                    Glide.with(getContext())
+                            .load(urlcontact)
+                            .crossFade()
+                            .centerCrop()
+                            .into(centerContact);
+                }
             }
         });
 

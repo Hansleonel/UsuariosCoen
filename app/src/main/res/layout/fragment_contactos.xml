@@ -83,7 +83,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="20dp"
-                android:text="El usuario"
+                android:text="El usuario:  A01 se conecto por ultima vez a las 10 p.m."
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
 
@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:text="Estado"
+                android:text="Estado: En linea"
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
 
@@ -101,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:text="Mensaje"
+                android:text="Mensaje: Mi ultima ubicacion fue en  Lima, Peru"
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
         </LinearLayout>
