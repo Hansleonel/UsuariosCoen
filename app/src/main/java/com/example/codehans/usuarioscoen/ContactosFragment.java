@@ -1,6 +1,7 @@
 package com.example.codehans.usuarioscoen;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -59,6 +60,8 @@ public class ContactosFragment extends Fragment {
             }
         });
 
+        recuperar_contactos();
+
 
         urlcontact = "";
         Glide.with(getContext())
@@ -107,7 +110,8 @@ public class ContactosFragment extends Fragment {
             public void onClick(View v) {
                 if (urlcontact.isEmpty()) {
                     //Toast.makeText(getContext(), "ENVIAR", Toast.LENGTH_LONG).show();
-
+                    Intent i = new Intent(getContext(), AddContactosActivity.class);
+                    startActivity(i);
                 } else {
                     Glide.with(getContext())
                             .load(urlcontact)
@@ -162,7 +166,13 @@ public class ContactosFragment extends Fragment {
             }
         });
 
+
+
         return linearLayout;
+    }
+
+    private void recuperar_contactos() {
+
     }
 
 

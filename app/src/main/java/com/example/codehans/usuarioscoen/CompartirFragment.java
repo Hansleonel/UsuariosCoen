@@ -25,6 +25,9 @@ public class CompartirFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         RelativeLayout relativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_compartir, container, false);
+
+
+
         return relativeLayout;
     }
 }

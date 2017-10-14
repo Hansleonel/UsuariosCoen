@@ -257,10 +257,10 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                                 String latitud = jrJsonObject.getString("latitud");
                                 String longitud = jrJsonObject.getString("longitud");
                                 String predio = jrJsonObject.getString("predio");
-                                //String Descripicion = jrJsonObject.getString("descripcion");
+                                String entidad = jrJsonObject.getString("entidad");
                                 Double lat = Double.parseDouble(latitud);
                                 Double longit = Double.parseDouble(longitud);
-                                MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(predio).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_y)));
+                                MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(predio).snippet(entidad).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_y)));
                             }
                             //JSONObject jresponse = response.getJSONObject(0);
                             //String descripcion = jresponse.getString("latitud");
@@ -388,7 +388,9 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
             Mostrar_Predios_MarinaGuerra();
         } else if (actionResult.equals("show.placeFuerza")) {
             Mostrar_Predios_FuerzaArea();
-        }
+        } //else if(actionResult.equals(" ")){
+            //Enviar_Alerta();
+        //}
 
     }
 

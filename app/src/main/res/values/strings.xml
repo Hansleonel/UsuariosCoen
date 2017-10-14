@@ -18,6 +18,10 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="accept">Aceptar</string>
+    <string name="name">Nombres</string>
+    <string name="lname">Apellidos</string>
+    <string name="direction">Dirección</string>
+    <string name="email">Email</string>
     <string name="register">Registrar</string>
     <string name="user">User</string>
     <string name="ubication">Ubicacion</string>

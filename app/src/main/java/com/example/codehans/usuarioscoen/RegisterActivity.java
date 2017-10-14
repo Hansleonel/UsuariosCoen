@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    public static final String URL = "http://10.24.9.6:8080/coen/api/register";
+    public static final String URL = "http://10.24.9.6:8080/sigem/api/register";
     public static final String KEY_MAIL = "email";
     public static final String KEY_LENGUAGE = "langKey";
     public static final String KEY_DNI = "login";

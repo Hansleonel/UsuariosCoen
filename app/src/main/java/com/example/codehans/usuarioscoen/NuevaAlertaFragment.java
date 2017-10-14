@@ -128,8 +128,10 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
         try {
             //js.put("descripcion", "DDDDD");
             js.put("descripcion", message);
+            js.put("estado", "ACTIVO");
             js.put("fecha", "2017-08-19");
             //js.put("longitud", 222.1);
+            //js.put("estado", "ACTIVO");
             js.put("latitud", lat);
             //js.put("latitud", 22.2);
             js.put("longitud", lng);
@@ -221,7 +223,7 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
             }
 
             //editText_ubicacion.setText("Latitud: " + String.valueOf(location.getLatitude()) + " Longitud" + String.valueOf(location.getLongitude()));
-            editText_ubicacion.setText(" " + address+" "+city);
+            editText_ubicacion.setText(" " + address + " " + city);
             Toast.makeText(getContext(), "DIRECCION " + address, Toast.LENGTH_LONG).show();
             LATI = String.valueOf(location.getLongitude());
             LONGI = String.valueOf(location.getLatitude());
