@@ -52,6 +52,17 @@
                 android:layout_marginTop="20dp"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress" />
+
+            <Button
+                android:id="@+id/Aceptar_perfil"
+                android:background="@color/colorPrimary"
+                android:textColor="@android:color/white"
+                android:text="@string/accept"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </ScrollView>

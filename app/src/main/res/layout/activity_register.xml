@@ -30,7 +30,7 @@
         android:textAlignment="center" />
 
     <EditText
-        android:id="@+id/edtV_username"
+        android:id="@+id/edtV_numero_telefonico"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginEnd="20dp"
@@ -39,7 +39,21 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/edt_cstm"
-        android:hint="Usuario"
+        android:hint="Numero Telefonico"
+        android:inputType="textEmailAddress"
+        android:textAlignment="center" />
+
+    <EditText
+        android:id="@+id/edtV_mail"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edt_cstm"
+        android:hint="Mail"
         android:inputType="textEmailAddress"
         android:textAlignment="center" />
 
@@ -53,7 +67,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/edt_cstm"
-        android:hint="Pass"
+        android:hint="Password"
         android:inputType="textPassword"
         android:textAlignment="center" />
 

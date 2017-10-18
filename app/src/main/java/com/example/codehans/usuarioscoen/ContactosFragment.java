@@ -2,6 +2,7 @@ package com.example.codehans.usuarioscoen;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,7 +15,24 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -38,12 +56,17 @@ public class ContactosFragment extends Fragment {
     private FloatingActionButton floatingActionButton_contacts;
     private String urlcontact = "";
     private String urlcontact2, urlcontact3, urlcontact4, urlcontact5, urlcenter;
+    private String URL_CONTACTOS = "http://10.24.9.6:8080/sigem/api/contactos";
+    private String TOKEN = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_contactos, container, false);
+
+        SharedPreferences pref = getActivity().getSharedPreferences("TOKENSHAREFILE", Context.MODE_PRIVATE);
+        TOKEN = pref.getString("TOKENSTRING", "ERROR");
 
         contact01 = (ImageView) linearLayout.findViewById(R.id.circleImageV_contact01);
         contact02 = (ImageView) linearLayout.findViewById(R.id.circleImageV_contact02);
@@ -172,6 +195,55 @@ public class ContactosFragment extends Fragment {
     }
 
     private void recuperar_contactos() {
+
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET, URL_CONTACTOS, null,
+
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject jrJsonObject = response.getJSONObject(i);
+                                String latitud = jrJsonObject.getString("latitud");
+                                String longitud = jrJsonObject.getString("longitud");
+                                String predio = jrJsonObject.getString("predio");
+                                String entidad = jrJsonObject.getString("entidad");
+                                Double lat = Double.parseDouble(latitud);
+                                Double longit = Double.parseDouble(longitud);
+
+                            }
+                            //JSONObject jresponse = response.getJSONObject(0);
+                            //String descripcion = jresponse.getString("latitud");
+                            //Double latitud = Double.parseDouble(descripcion);
+                            //Log.d("DESCRIPCION", latitud + " size " + response.length());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("eRRor Response", "Error: " + error.toString());
+                //Toast.makeText(getContext(), "" + error.toString(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("Authorization", "Bearer " + TOKEN);
+                return headers;
+            }
+        };
+
+        // Adding request to request queue
+        Volley.newRequestQueue(getContext()).add(jsonArrayRequest);
 
     }
 

@@ -12,12 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <EditText
+    <!--<EditText
         android:id="@+id/edtV_ver"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp" />
+        android:layout_marginRight="20dp" />-->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_map"

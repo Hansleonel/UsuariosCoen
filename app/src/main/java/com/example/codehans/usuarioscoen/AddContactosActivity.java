@@ -1,17 +1,26 @@
 package com.example.codehans.usuarioscoen;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +28,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -42,11 +52,12 @@ public class AddContactosActivity extends AppCompatActivity {
     private Bitmap bitmap;
     public static final int RESULT_PICK_CONTACT = 1001;
     public static final int PICK_IMAGE_REQUEST = 111;
+    public static final int SEND_SMS_PERMISSION_REQUEST_CODE = 1002;
     private TextView txtV_nombre_contacto;
     private TextView txtV_numero_contacto;
     private Button btn_registrar_contacto;
     private ProgressDialog progressDialog;
-    private ImageView imageView_contacto;
+    private CircleImageView imageView_contacto;
     public static final String URL_ADD_CONTACT = "http://10.24.9.6:8080/sigem/api/contactos";
     String TOKEN = " ";
 
@@ -59,7 +70,10 @@ public class AddContactosActivity extends AppCompatActivity {
         txtV_nombre_contacto = (TextView) findViewById(R.id.txtV_NameContact);
         txtV_numero_contacto = (TextView) findViewById(R.id.txtV_NumberContact);
         btn_registrar_contacto = (Button) findViewById(R.id.btn_registrar_contacto);
-        imageView_contacto = (ImageView) findViewById(R.id.imgV_photoContact);
+        imageView_contacto = (CircleImageView) findViewById(R.id.imgV_photoContact);
+
+        permisos();
+        //permisos_sms();
 
         imageView_contacto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,9 +96,91 @@ public class AddContactosActivity extends AppCompatActivity {
             }
         });
 
+
         SharedPreferences pref = getApplication().getSharedPreferences("TOKENSHAREFILE", Context.MODE_PRIVATE);
         TOKEN = pref.getString("TOKENSTRING", "ERROR");
         Toast.makeText(getApplicationContext(), " ESTE ES EL TOKEN " + TOKEN, Toast.LENGTH_LONG).show();
+    }
+
+    private void permisos() {
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        //    if (!Settings.System.canWrite(this)) {
+        //       requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        //             Manifest.permission.READ_EXTERNAL_STORAGE}, 2909);
+        //   } else {
+        // continue with your code
+        //   }
+        //}
+
+        int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.SEND_SMS);
+
+        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(AddContactosActivity.this,
+                    Manifest.permission.SEND_SMS)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(AddContactosActivity.this,
+                        new String[]{Manifest.permission.SEND_SMS},
+                        1002);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+
+            case 2909: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.e("Permission", "Granted");
+                } else {
+                    Log.e("Permission", "Denied");
+                }
+                break;
+            }
+            case 1: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+                        Toast.makeText(getApplicationContext(), "PERMISO OTORGADO", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "PERMISO NO OTORGADO", Toast.LENGTH_LONG).show();
+                    }
+                }
+                break;
+            }
+            case 1002: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+        }
     }
 
     private void picker_photo() {
@@ -95,22 +191,33 @@ public class AddContactosActivity extends AppCompatActivity {
     }
 
     private void registrar_contacto() {
+
+        //String mensaje = "INSTALA LA APLICACION DIRECTAMENTE DESDE EL GOOGLE PLAY unasolafuerza.org";
+        //String numero_sms = txtV_numero_contacto.getText().toString();
+
+
         String nombre_contacto = txtV_nombre_contacto.getText().toString();
         String numero_contacto = txtV_numero_contacto.getText().toString();
+
+        enviar_sms();
 
         progressDialog = new ProgressDialog(AddContactosActivity.this);
         progressDialog.setMessage("Subiendo por favor espere...");
         progressDialog.show();
 
 
-        //Log.d("IMAGE", "registrar_contacto: "+imageString);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        final String imageString = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+        Log.d("IMAGE", "registrar_contacto: " + imageString);
 
 
         JSONObject js = new JSONObject();
         try {
             js.put("alias", nombre_contacto);
             js.put("nroCelular", numero_contacto);
-            //js.put("",imageString);
+            js.put("photo", imageString);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -158,6 +265,29 @@ public class AddContactosActivity extends AppCompatActivity {
         };
         // Adding request to request queue
         Volley.newRequestQueue(getApplicationContext()).add(jsonObjReq);
+    }
+
+    private void enviar_sms() {
+
+        String nombre_contacto = txtV_nombre_contacto.getText().toString();
+        String numero_contacto = txtV_numero_contacto.getText().toString();
+        String mensaje = "Hola" + nombre_contacto + " Ingresa a mindef.gob.pe e instala la aplicacion en casos de emergencia yo ya tengo la aplicaicon";
+
+
+        try {
+            int permissionChek = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
+            if (permissionChek != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getApplicationContext(), "NO SE TIENEN LOS PERMISOS NECESARIOS", Toast.LENGTH_LONG).show();
+            } else {
+                Log.d("MENSAJE DE TEXTO", "enviar_sms: SE TIENE PERMISOS");
+            }
+
+            SmsManager sms = SmsManager.getDefault();
+            sms.sendTextMessage(numero_contacto, null, mensaje, null, null);
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "MENSAJE NO ENVIADO ERROR", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
     }
 
     private void picker_contacto() {
@@ -208,10 +338,9 @@ public class AddContactosActivity extends AppCompatActivity {
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                         byte[] imageBytes = baos.toByteArray();
-                        final String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                        final String imageString = Base64.encodeToString(imageBytes, Base64.URL_SAFE);
 
-                        Log.d("BITMAP TO BASE 64", "onActivityResult: "+imageString);
-
+                        Log.d("BITMAP TO BASE 64", "onActivityResult: " + imageString);
 
 
                     } catch (Exception e) {
@@ -221,4 +350,5 @@ public class AddContactosActivity extends AppCompatActivity {
             }
         }
     }
+
 }

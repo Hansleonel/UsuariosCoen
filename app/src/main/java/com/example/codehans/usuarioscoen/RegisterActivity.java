@@ -1,5 +1,6 @@
 package com.example.codehans.usuarioscoen;
 
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,13 +30,13 @@ import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    public static final String URL = "http://10.24.9.6:8080/sigem/api/register";
+    public static final String URL = "http://10.24.9.6:8080/sigem/api/registerMobil";
     public static final String KEY_MAIL = "email";
     public static final String KEY_LENGUAGE = "langKey";
     public static final String KEY_DNI = "login";
     public static final String KEY_PASSWORD = "password";
 
-    private EditText edtV_user, edtV_password, edtV_DNI;
+    private EditText edtV_user, edtV_numero, edtV_DNI, edtV_mail, edtV_Password;
     private Button btn_registrar;
 
     @Override
@@ -44,8 +45,9 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         edtV_DNI = (EditText) findViewById(R.id.edtV_DNI);
-        edtV_password = (EditText) findViewById(R.id.edtV_password);
-        edtV_user = (EditText) findViewById(R.id.edtV_username);
+        edtV_numero = (EditText) findViewById(R.id.edtV_numero_telefonico);
+        edtV_mail = (EditText) findViewById(R.id.edtV_mail);
+        edtV_Password = (EditText) findViewById(R.id.edtV_password);
 
         btn_registrar = (Button) findViewById(R.id.btn_registrar);
 
@@ -60,17 +62,26 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registrar_user(final View v) {
 
-        final String mail = edtV_user.getText().toString().trim();
-        final String password = edtV_password.getText().toString().trim();
         final String dni = edtV_DNI.getText().toString().trim();
+        final String numero = edtV_numero.getText().toString().trim();
+        final String mail = edtV_mail.getText().toString().trim();
+        final String password = edtV_Password.getText().toString().trim();
+
+        final String[] idUser = {" "};
+        final String[] userName = {" "};
+        final String[] nroCelular = {" "};
+        final String[] email = {" "};
+        String id = " ";
+
         final String lenguage = "es";
 
         JSONObject js = new JSONObject();
         try {
-            js.put("login", dni);
+            js.put("username", dni);
+            js.put("nroCelular", numero);
             js.put("email", mail);
             js.put("password", password);
-            js.put("langKey", "es");
+            //js.put("langKey", "es");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -82,18 +93,35 @@ public class RegisterActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+
+
                         try {
-                            Log.d("AAAAAAA", response.get("message") + " i am queen");
+                            Log.d("onResponse Register", response.get("authorities") + " i am queen");
+                            idUser[0] = response.get("idUser").toString();
+                            userName[0] = response.get("username").toString();
+                            nroCelular[0] = response.get("nroCelular").toString();
+                            email[0] = response.get("email").toString();
+                            Log.d("TO ID USER", "onResponse: " + idUser[0]);
+                            Log.d("USER NAME", "onResponse: " + userName[0]);
+                            Log.d("NRO CELULAR", "onResponse: " + nroCelular[0]);
+                            Log.d("EMAIL", "onResponse: " + email[0]);
+                            Log.d("Register", "onResponse: " + response);
                             Toast.makeText(RegisterActivity.this, "USUARIO REGISTRADO", Toast.LENGTH_LONG).show();
-                            Snackbar.make(v, "CONFIRMA TU PASSWORD CON TU MAIL", Snackbar.LENGTH_INDEFINITE).setAction("LOGIN", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    finish();
-                                }
-                            }).show();
+                            //Snackbar.make(v, "CONFIRMA TU PASSWORD CON TU MAIL", Snackbar.LENGTH_INDEFINITE).setAction("LOGIN", new View.OnClickListener() {
+                            //   @Override
+                            //     finish();
+                            //   }
+                            //}).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        Intent intentPerfil = new Intent(RegisterActivity.this, PerfilActivity.class);
+                        intentPerfil.putExtra("idUser", idUser[0]);
+                        intentPerfil.putExtra("userName",userName[0]);
+                        intentPerfil.putExtra("nroCelular",nroCelular[0]);
+                        intentPerfil.putExtra("email",email[0]);
+                        //Toast.makeText(getApplicationContext(),idUser[0],Toast.LENGTH_LONG).show();
+                        startActivity(intentPerfil);
                     }
                 }, new Response.ErrorListener() {
             @Override

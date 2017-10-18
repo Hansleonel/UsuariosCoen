@@ -105,7 +105,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
         aiService = AIService.getService(getContext(), config);
         aiService.setListener(this);
 
-        editText_visualizar = (EditText) view.findViewById(R.id.edtV_ver);
+        //editText_visualizar = (EditText) view.findViewById(R.id.edtV_ver);
 
 
         //todo FloatingButton dentro del fragment no es totalment recomendado
@@ -115,20 +115,20 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
             public void onClick(View v) {
                 //Toast.makeText(getContext(), "FUNCION FLOATING", Toast.LENGTH_LONG).show();
                 aiService.startListening();
-                String predio = editText_visualizar.getText().toString();
-                if (predio.startsWith("MAR")) {
-                    Mostrar_Predios_MarinaGuerra();
-                } else if (predio.startsWith("EJE")) {
-                    Mostrar_Predios_Ejercito();
-                } else if (predio.startsWith("FU")) {
-                    Mostrar_Predios_FuerzaArea();
-                } else if (predio.startsWith("PRE")) {
-                    Mostrar_Predios();
-                } else if (predio.startsWith("EVE")) {
-                    Mostrar_Eventos();
-                } else if (predio.startsWith("CENT")) {
-                    Mostrar_Centro_Acopio();
-                }
+                //String predio = editText_visualizar.getText().toString();
+                //if (predio.startsWith("MAR")) {
+                //    Mostrar_Predios_MarinaGuerra();
+                //} else if (predio.startsWith("EJE")) {
+                //    Mostrar_Predios_Ejercito();
+                //} else if (predio.startsWith("FU")) {
+                //    Mostrar_Predios_FuerzaArea();
+                //} else if (predio.startsWith("PRE")) {
+                //    Mostrar_Predios();
+                //} else if (predio.startsWith("EVE")) {
+                //    Mostrar_Eventos();
+                //} else if (predio.startsWith("CENT")) {
+                //    Mostrar_Centro_Acopio();
+                //}
             }
         });
 
@@ -151,7 +151,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
-                            for (int i = 0; i < 100; i++) {
+                            for (int i = 0; i < 200; i++) {
                                 JSONObject jrJsonObject = response.getJSONObject(i);
                                 String latitud = jrJsonObject.getString("latitud");
                                 String longitud = jrJsonObject.getString("longitud");
@@ -238,6 +238,8 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
         //Mostrar_Predios();
         //todo MOSTRANDO CENTRO
         Mostrar_Centro_Acopio();
+        //todo MOSTRANDO EVENTOS
+        Mostrar_Eventos();
     }
 
     private void Mostrar_Centro_Acopio() {
@@ -275,7 +277,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d("eRRor Response", "Error: " + error.toString());
-                Toast.makeText(getContext(), "" + error.toString(), Toast.LENGTH_LONG).show();
+              //  Toast.makeText(getContext(), "" + error.toString(), Toast.LENGTH_LONG).show();
             }
         }) {
 
@@ -298,7 +300,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
 
     private void Mostrar_Predios() {
         MgoogleMap.clear();
-        MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(-12.246373, -76.242754)).title("Lima").icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_marker)));
+        //MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(-12.246373, -76.242754)).title("Lima").icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_marker)));
         //todo Para los JSONARRAY usamos este metodo
         //todo Verificar que no es igual al metodo de alerta donde solo se obtiene como respuesta un Jsonobjet
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
@@ -313,10 +315,10 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                                 String latitud = jrJsonObject.getString("latitud");
                                 String longitud = jrJsonObject.getString("longitud");
                                 String Entidad = jrJsonObject.getString("entidad");
-                                //String Descripicion = jrJsonObject.getString("descripcion");
+                                String Descripicion = jrJsonObject.getString("descripcion");
                                 Double lat = Double.parseDouble(latitud);
                                 Double longit = Double.parseDouble(longitud);
-                                MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(Entidad).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_g)));
+                                MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(Entidad).snippet(Descripicion).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_g)));
                             }
                             //JSONObject jresponse = response.getJSONObject(0);
                             //String descripcion = jresponse.getString("latitud");
@@ -389,7 +391,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
         } else if (actionResult.equals("show.placeFuerza")) {
             Mostrar_Predios_FuerzaArea();
         } //else if(actionResult.equals(" ")){
-            //Enviar_Alerta();
+        //Enviar_Alerta();
         //}
 
     }
@@ -411,11 +413,11 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                                 String latitud = jrJsonObject.getString("latitud");
                                 String longitud = jrJsonObject.getString("longitud");
                                 String Entidad = jrJsonObject.getString("entidad");
-                                //String Descripicion = jrJsonObject.getString("descripcion");
+                                String Descripicion = jrJsonObject.getString("descripcion");
                                 if (Entidad.startsWith("FUERZA")) {
                                     Double lat = Double.parseDouble(latitud);
                                     Double longit = Double.parseDouble(longitud);
-                                    MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(Entidad).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_g)));
+                                    MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(Entidad).snippet(Descripicion).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_g)));
                                 }
                             }
                             //JSONObject jresponse = response.getJSONObject(0);
@@ -469,11 +471,11 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                                 String latitud = jrJsonObject.getString("latitud");
                                 String longitud = jrJsonObject.getString("longitud");
                                 String Entidad = jrJsonObject.getString("entidad");
-                                //String Descripicion = jrJsonObject.getString("descripcion");
+                                String Descripicion = jrJsonObject.getString("descripcion");
                                 if (Entidad.startsWith("MA")) {
                                     Double lat = Double.parseDouble(latitud);
                                     Double longit = Double.parseDouble(longitud);
-                                    MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(Entidad).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_g)));
+                                    MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(Entidad).snippet(Descripicion).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_g)));
                                 }
                             }
                             //JSONObject jresponse = response.getJSONObject(0);
@@ -527,12 +529,12 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                                 String latitud = jrJsonObject.getString("latitud");
                                 String longitud = jrJsonObject.getString("longitud");
                                 String Entidad = jrJsonObject.getString("entidad");
-                                //String Descripicion = jrJsonObject.getString("descripcion");
+                                String Descripicion = jrJsonObject.getString("descripcion");
                                 if (Entidad.startsWith("EJE")) {
 
                                     Double lat = Double.parseDouble(latitud);
                                     Double longit = Double.parseDouble(longitud);
-                                    MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(Entidad).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_g)));
+                                    MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(Entidad).snippet(Descripicion).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_g)));
                                 }
                             }
                             //JSONObject jresponse = response.getJSONObject(0);

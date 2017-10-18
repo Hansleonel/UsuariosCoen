@@ -32,12 +32,17 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -60,6 +65,7 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
 
     public static final String TAG = "LOCALIZACION";
     public static final String URL = "http://10.24.9.6:8080/sigem/api/reporte-ciudadanos";
+    public static final String URL_TIPOEVENTO = "http://10.24.9.6:8080/sigem/api/tipo-eventos";
     //public static final String TOKEN = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOLFJPTEVfVVNFUiIsImV4cCI6MTUwODQ0MTI2MX0.EMyUJ77RpKLyB_xKOurLDcq7wYZpj8d11APDGxctujHdXqi8gHpsiqenUj1VtHNKdS-IiOwXmXWfTx0hjDfxwg";
     private static final int PETICION_PERMISO_LOCALIZACION = 101;
     private EditText editText_ubicacion;
@@ -79,11 +85,15 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         RelativeLayout relativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_nueva_alerta, container, false);
+        //todo uso de sharedpreference para la recuperacion del token
+        SharedPreferences pref = getActivity().getSharedPreferences("TOKENSHAREFILE", Context.MODE_PRIVATE);
+        TOKEN = pref.getString("TOKENSTRING", "ERROR");
 
+        tipos_eventos();
 
         editText_ubicacion = (EditText) relativeLayout.findViewById(R.id.edtV_Ubicacion);
         editText_message = (EditText) relativeLayout.findViewById(R.id.edtV_Message);
-        //spinner_tipoE = (Spinner) relativeLayout.findViewById(R.id.cmbx_TipoE);
+        spinner_tipoE = (Spinner) relativeLayout.findViewById(R.id.cmbx_TipoE);
         //spinner_tipoC = (Spinner) relativeLayout.findViewById(R.id.cmbx_TipoC);
         btn_alert = (Button) relativeLayout.findViewById(R.id.btn_accept_alert);
         btn_alert.setOnClickListener(new View.OnClickListener() {
@@ -96,17 +106,12 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
         });
 
 
-        //String[] emergency = new String[]{"Inundacion", "Huayco", "Terremoto"};
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_dropdown_item,emergency);
-        //spinner_tipoE.setAdapter(adapter);
+        String[] emergency = new String[]{"Inundacion", "Huayco", "Terremoto"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, emergency);
+        spinner_tipoE.setAdapter(adapter);
 
         //String[] concecuency = new String[]{"Puente Caido","Colegio Colapsado","Plaza Inundada"};
         //ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_dropdown_item,concecuency);
-
-        //todo uso de sharedpreference para la recuperacion del token
-        SharedPreferences pref = getActivity().getSharedPreferences("TOKENSHAREFILE", Context.MODE_PRIVATE);
-        TOKEN = pref.getString("TOKENSTRING", "ERROR");
-        //Toast.makeText(getContext(), " " + TOKEN, Toast.LENGTH_LONG).show();
 
 
         apiClient = new GoogleApiClient.Builder(getContext())
@@ -118,16 +123,65 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
         return relativeLayout;
     }
 
+    private void tipos_eventos() {
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET, URL_TIPOEVENTO, null,
+
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject jrJsonObject = response.getJSONObject(i);
+                                String latitud = jrJsonObject.getString("latitud");
+
+
+                            }
+                            //JSONObject jresponse = response.getJSONObject(0);
+                            //String descripcion = jresponse.getString("latitud");
+                            //Double latitud = Double.parseDouble(descripcion);
+                            //Log.d("DESCRIPCION", latitud + " size " + response.length());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("eRRor Response", "Error: " + error.toString());
+                Toast.makeText(getContext(), "" + error.toString(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("Authorization", "Bearer " + TOKEN);
+                return headers;
+            }
+        };
+
+        // Adding request to request queue
+        Volley.newRequestQueue(getContext()).add(jsonArrayRequest);
+    }
+
     private void envio_reporte_alerta(final View v) {
 
         String message = editText_message.getText().toString();
         Double lat = Double.parseDouble(LATI);
         Double lng = Double.parseDouble(LONGI);
+        //Toast.makeText(getApplicationContext()," "+TOKEN,Toast.LENGTH_LONG).show();
 
         JSONObject js = new JSONObject();
         try {
             //js.put("descripcion", "DDDDD");
             js.put("descripcion", message);
+            //js.put("lugar","nombreLugar");
             js.put("estado", "ACTIVO");
             js.put("fecha", "2017-08-19");
             //js.put("longitud", 222.1);
