@@ -53,7 +53,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/edt_cstm"
-        android:hint="Mail"
+        android:hint="Fecha Nacimiento"
         android:inputType="textEmailAddress"
         android:textAlignment="center" />
 

@@ -58,7 +58,8 @@ public class AddContactosActivity extends AppCompatActivity {
     private Button btn_registrar_contacto;
     private ProgressDialog progressDialog;
     private CircleImageView imageView_contacto;
-    public static final String URL_ADD_CONTACT = "http://10.24.9.6:8080/sigem/api/contactos";
+    //public static final String URL_ADD_CONTACT = "http://10.24.9.6:8080/sigem/api/contactos";
+    public static final String URL_ADD_CONTACT = "http://www.ocrm.gob.pe/sigem/api/contactos";
     String TOKEN = " ";
 
     @Override
@@ -284,6 +285,7 @@ public class AddContactosActivity extends AppCompatActivity {
 
             SmsManager sms = SmsManager.getDefault();
             sms.sendTextMessage(numero_contacto, null, mensaje, null, null);
+            //finish();
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "MENSAJE NO ENVIADO ERROR", Toast.LENGTH_LONG).show();
             e.printStackTrace();

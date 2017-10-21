@@ -69,9 +69,13 @@ import ai.api.model.Result;
  */
 public class MapasFragment extends Fragment implements OnMapReadyCallback, AIListener {
 
-    public static final String URL = "http://10.24.9.6:8080/sigem/api/predioffaasCustom";
-    public static final String URLACOP = "http://10.24.9.6:8080/sigem/api/centroAcopioCustom";
-    public static final String URLEVENTOS = "http://10.24.9.6:8080/sigem/api/eventoCustom";
+    //public static final String URL = "http://10.24.9.6:8080/sigem/api/predioffaasCustom";
+    //public static final String URLACOP = "http://10.24.9.6:8080/sigem/api/centroAcopioCustom";
+    //public static final String URLEVENTOS = "http://10.24.9.6:8080/sigem/api/eventoCustom";
+
+    public static final String URL = "http://www.ocrm.gob.pe/sigem/api/predioffaasCustom";
+    public static final String URLACOP = "http://www.ocrm.gob.pe/sigem/api/centroAcopioCustom";
+    public static final String URLEVENTOS = "http://www.ocrm.gob.pe/sigem/api/eventoCustom";
 
     //todo: PARA EL USO DE MAPS RECUERDA EL USO DEL KEY ADEMAS DE IMPLEMENTAR
     //todo: el OnMapReadyCallB
@@ -258,11 +262,11 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                                 JSONObject jrJsonObject = response.getJSONObject(i);
                                 String latitud = jrJsonObject.getString("latitud");
                                 String longitud = jrJsonObject.getString("longitud");
-                                String predio = jrJsonObject.getString("predio");
+                                //String predio = jrJsonObject.getString("predio");
                                 String entidad = jrJsonObject.getString("entidad");
                                 Double lat = Double.parseDouble(latitud);
                                 Double longit = Double.parseDouble(longitud);
-                                MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(predio).snippet(entidad).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_y)));
+                                MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(entidad).snippet(entidad).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_y)));
                             }
                             //JSONObject jresponse = response.getJSONObject(0);
                             //String descripcion = jresponse.getString("latitud");
@@ -381,6 +385,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
         if (actionResult.equals("show.place")) {
             Mostrar_Predios();
         } else if (actionResult.equals("show.gatheringplace")) {
+
             Mostrar_Centro_Acopio();
         } else if (actionResult.equals("show.eventsplace")) {
             Mostrar_Eventos();

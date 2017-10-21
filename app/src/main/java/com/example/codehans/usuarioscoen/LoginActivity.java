@@ -43,7 +43,10 @@ public class LoginActivity extends AppCompatActivity {
 
     Context context = this;
 
-    public static final String URL = "http://10.24.9.6:8080/sigem/api/authenticate";
+
+    //public static final String URL = "http://10.24.9.6:8080/sigem/api/authenticate";
+    //public static final String URL = "https://sistemas.mindef.gob.pe/sigem/api/authenticate";
+    public static final String URL = "http://www.ocrm.gob.pe/sigem/api/authenticate";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +125,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d("EEEEEE", "Error: " + error.toString());
+                Toast.makeText(getApplicationContext(), "ERROR ON LOGIN : " + error.toString(), Toast.LENGTH_LONG).show();
             }
         }) {
 

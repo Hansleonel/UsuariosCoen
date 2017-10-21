@@ -33,7 +33,9 @@ public class PerfilActivity extends AppCompatActivity {
     private EditText edtV_email_perfil;
     private ImageView photo_perfil;
     private Button btn_aceptar_perfil;
-    public static final String URL_CIUDADANOS = "http://10.24.9.6:8080/sigem/api/ciudadanos";
+    //public static final String URL_CIUDADANOS = "http://10.24.9.6:8080/sigem/api/ciudadanos";
+    public static final String URL_CIUDADANOS = "http://www.ocrm.gob.pe/sigem/api/ciudadanos";
+    //public static final String URL_CIUDADANOS = "https://sistemas.mindef.gob.pe/sigem/api/ciudadanos";
 
     private String idUserPerfil;
     private String userNamePerfil;
@@ -54,16 +56,21 @@ public class PerfilActivity extends AppCompatActivity {
         Intent in = getIntent();
         idUserPerfil = in.getStringExtra("idUser");
         userNamePerfil = in.getStringExtra("userName");
-        emailPerfil = in.getStringExtra("email");
+        //emailPerfil = in.getStringExtra("email");
         nroCelular = in.getStringExtra("nroCelular");
         //Toast.makeText(getApplicationContext()," "+TOKEN,Toast.LENGTH_LONG).show();
 
-        edtV_email_perfil.setText(emailPerfil);
+        //edtV_email_perfil.setText(emailPerfil);
 
         btn_aceptar_perfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 registro_ciudadano();
+                //todo verificar la necesidad de estas lineas
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+
             }
         });
 
@@ -71,28 +78,28 @@ public class PerfilActivity extends AppCompatActivity {
 
     private void registro_ciudadano() {
 
-        Log.d("ON PERFIL ID USER", "onCreate: "+idUserPerfil);
-        Log.d("ON PERFIL USER NAME", "onCreate: "+userNamePerfil);
-        Log.d("ON PERFIL USER NAME", "onCreate: "+emailPerfil);
-        Log.d("ON PERFIL USER NAME", "onCreate: "+nroCelular);
+        Log.d("ON PERFIL ID USER", "onCreate: " + idUserPerfil);
+        Log.d("ON PERFIL USER NAME", "onCreate: " + userNamePerfil);
+        //Log.d("ON PERFIL USER NAME", "onCreate: " + emailPerfil);
+        Log.d("ON PERFIL USER NAME", "onCreate: " + nroCelular);
         final String apellido = edtV_apellido_perfil.getText().toString().trim();
         final String nombre = edtV_nombre_perfil.getText().toString().trim();
-
+        final String email = edtV_email_perfil.getText().toString().trim();
 
 
         JSONObject js = new JSONObject();
         JSONObject js1 = new JSONObject();
         try {
-            js1.put("idUser",Integer.parseInt(idUserPerfil));
-            js1.put("username",userNamePerfil);
+            js1.put("idUser", Integer.parseInt(idUserPerfil));
+            js1.put("username", userNamePerfil);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
             js.put("apellidos", apellido);
-            js.put("nombres",nombre);
-            js.put("email", emailPerfil);
+            js.put("nombres", nombre);
+            js.put("email", email);
             js.put("latitud", 0.1);
             js.put("longitud", 0.2);
             js.put("nroCelular", nroCelular);
@@ -116,9 +123,9 @@ public class PerfilActivity extends AppCompatActivity {
                             Log.d("ON RESPONSE CIUDADANOS", response.get("createdDate") + " i am queen");
                             Toast.makeText(PerfilActivity.this, "CIUDADANO REGISTRADO", Toast.LENGTH_LONG).show();
 
-
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "HUBO UN ERROR CON LA INSCRIPCION", Toast.LENGTH_LONG).show();
                         }
                     }
                 }, new Response.ErrorListener() {

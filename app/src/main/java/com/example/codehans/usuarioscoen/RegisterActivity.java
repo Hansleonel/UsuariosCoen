@@ -30,7 +30,9 @@ import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    public static final String URL = "http://10.24.9.6:8080/sigem/api/registerMobil";
+    //public static final String URL = "http://10.24.9.6:8080/sigem/api/registerMobil";
+    //public static final String URL = "https://sistemas.mindef.gob.pe/sigem/api/registerMobil";
+    public static final String URL = "http://www.ocrm.gob.pe/sigem/api/registerMobil";
     public static final String KEY_MAIL = "email";
     public static final String KEY_LENGUAGE = "langKey";
     public static final String KEY_DNI = "login";
@@ -66,11 +68,12 @@ public class RegisterActivity extends AppCompatActivity {
         final String numero = edtV_numero.getText().toString().trim();
         final String mail = edtV_mail.getText().toString().trim();
         final String password = edtV_Password.getText().toString().trim();
+        final String nacimiento = edtV_mail.getText().toString().trim();
 
         final String[] idUser = {" "};
         final String[] userName = {" "};
         final String[] nroCelular = {" "};
-        final String[] email = {" "};
+        //final String[] email = {" "};
         String id = " ";
 
         final String lenguage = "es";
@@ -79,7 +82,8 @@ public class RegisterActivity extends AppCompatActivity {
         try {
             js.put("username", dni);
             js.put("nroCelular", numero);
-            js.put("email", mail);
+            //js.put("email", mail);
+            js.put("fechaNacimiento",nacimiento);
             js.put("password", password);
             //js.put("langKey", "es");
         } catch (JSONException e) {
@@ -100,11 +104,11 @@ public class RegisterActivity extends AppCompatActivity {
                             idUser[0] = response.get("idUser").toString();
                             userName[0] = response.get("username").toString();
                             nroCelular[0] = response.get("nroCelular").toString();
-                            email[0] = response.get("email").toString();
+                            //email[0] = response.get("email").toString();
                             Log.d("TO ID USER", "onResponse: " + idUser[0]);
                             Log.d("USER NAME", "onResponse: " + userName[0]);
                             Log.d("NRO CELULAR", "onResponse: " + nroCelular[0]);
-                            Log.d("EMAIL", "onResponse: " + email[0]);
+                            //Log.d("EMAIL", "onResponse: " + email[0]);
                             Log.d("Register", "onResponse: " + response);
                             Toast.makeText(RegisterActivity.this, "USUARIO REGISTRADO", Toast.LENGTH_LONG).show();
                             //Snackbar.make(v, "CONFIRMA TU PASSWORD CON TU MAIL", Snackbar.LENGTH_INDEFINITE).setAction("LOGIN", new View.OnClickListener() {
@@ -119,7 +123,7 @@ public class RegisterActivity extends AppCompatActivity {
                         intentPerfil.putExtra("idUser", idUser[0]);
                         intentPerfil.putExtra("userName",userName[0]);
                         intentPerfil.putExtra("nroCelular",nroCelular[0]);
-                        intentPerfil.putExtra("email",email[0]);
+                        //intentPerfil.putExtra("email",email[0]);
                         //Toast.makeText(getApplicationContext(),idUser[0],Toast.LENGTH_LONG).show();
                         startActivity(intentPerfil);
                     }

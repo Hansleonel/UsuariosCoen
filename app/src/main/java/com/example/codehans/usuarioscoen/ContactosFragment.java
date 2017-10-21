@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,8 +56,13 @@ public class ContactosFragment extends Fragment {
     private ImageView centerContact;
     private FloatingActionButton floatingActionButton_contacts;
     private String urlcontact = "";
-    private String urlcontact2, urlcontact3, urlcontact4, urlcontact5, urlcenter;
-    private String URL_CONTACTOS = "http://10.24.9.6:8080/sigem/api/contactos";
+    private String urlcontact2 = "";
+    private String urlcontact3 = "";
+    private String urlcontact4 = "";
+    private String urlcontact5 = "";
+    private String urlcenter;
+    //private String URL_CONTACTOS_BY_CIUDADANO = "http://10.24.9.6:8080/sigem/api/contactosByCiudadano";
+    private String URL_CONTACTOS_BY_CIUDADANO = "http://www.ocrm.gob.pe/sigem/api/contactosByCiudadano";
     private String TOKEN = "";
 
     @Override
@@ -86,7 +92,7 @@ public class ContactosFragment extends Fragment {
         recuperar_contactos();
 
 
-        urlcontact = "";
+        /*urlcontact = "";
         Glide.with(getContext())
                 .load(urlcontact)
                 .crossFade()
@@ -127,6 +133,7 @@ public class ContactosFragment extends Fragment {
                 .crossFade()
                 .centerCrop()
                 .into(centerContact);
+                */
 
         contact01.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,47 +155,70 @@ public class ContactosFragment extends Fragment {
         contact02.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Glide.with(getContext())
-                        .load(urlcontact2)
-                        .crossFade()
-                        .centerCrop()
-                        .into(centerContact);
+                if (urlcontact2.isEmpty()) {
+                    //Toast.makeText(getContext(), "ENVIAR", Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(getContext(), AddContactosActivity.class);
+                    startActivity(i);
+                } else {
+                    Glide.with(getContext())
+                            .load(urlcontact2)
+                            .crossFade()
+                            .centerCrop()
+                            .into(centerContact);
+                }
             }
         });
 
         contact03.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Glide.with(getContext())
-                        .load(urlcontact3)
-                        .crossFade()
-                        .centerCrop()
-                        .into(centerContact);
+                if (urlcontact3.isEmpty()) {
+                    //Toast.makeText(getContext(), "ENVIAR", Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(getContext(), AddContactosActivity.class);
+                    startActivity(i);
+                } else {
+                    Glide.with(getContext())
+                            .load(urlcontact3)
+                            .crossFade()
+                            .centerCrop()
+                            .into(centerContact);
+                }
             }
         });
 
         contact04.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Glide.with(getContext())
-                        .load(urlcontact4)
-                        .crossFade()
-                        .centerCrop()
-                        .into(centerContact);
+                if (urlcontact4.isEmpty()) {
+                    //Toast.makeText(getContext(), "ENVIAR", Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(getContext(), AddContactosActivity.class);
+                    startActivity(i);
+                } else {
+                    Glide.with(getContext())
+                            .load(urlcontact4)
+                            .crossFade()
+                            .centerCrop()
+                            .into(centerContact);
+                }
             }
         });
 
         contact05.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Glide.with(getContext())
-                        .load(urlcontact5)
-                        .crossFade()
-                        .centerCrop()
-                        .into(centerContact);
+                if (urlcontact5.isEmpty()) {
+                    //Toast.makeText(getContext(), "ENVIAR", Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(getContext(), AddContactosActivity.class);
+                    startActivity(i);
+                } else {
+                    Glide.with(getContext())
+                            .load(urlcontact5)
+                            .crossFade()
+                            .centerCrop()
+                            .into(centerContact);
+                }
             }
         });
-
 
 
         return linearLayout;
@@ -197,7 +227,7 @@ public class ContactosFragment extends Fragment {
     private void recuperar_contactos() {
 
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET, URL_CONTACTOS, null,
+                Request.Method.GET, URL_CONTACTOS_BY_CIUDADANO, null,
 
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -205,12 +235,52 @@ public class ContactosFragment extends Fragment {
                         try {
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject jrJsonObject = response.getJSONObject(i);
-                                String latitud = jrJsonObject.getString("latitud");
-                                String longitud = jrJsonObject.getString("longitud");
-                                String predio = jrJsonObject.getString("predio");
-                                String entidad = jrJsonObject.getString("entidad");
-                                Double lat = Double.parseDouble(latitud);
-                                Double longit = Double.parseDouble(longitud);
+                                String numero = jrJsonObject.getString("nroCelular");
+                                String photo = jrJsonObject.getString("photo");
+                                Log.d("ON RESULT GETCONTACTS", "onResponse: " + numero + " " + photo);
+
+                                if (i == 0) {
+                                    urlcontact = "http://www.ocrm.gob.pe/sigem_files/" + photo;
+                                    //urlcontact = "http://10.24.9.6:8080/sigem_files/" + photo;
+                                    Glide.with(getContext())
+                                            .load(urlcontact)
+                                            .crossFade()
+                                            .centerCrop()
+                                            .into(contact01);
+                                } else if (i == 1) {
+                                    //urlcontact2 = "http://10.24.9.6:8080/sigem_files/" + photo;
+                                    urlcontact2 = "http://www.ocrm.gob.pe/sigem_files/" + photo;
+                                    Glide.with(getContext())
+                                            .load(urlcontact2)
+                                            .crossFade()
+                                            .centerCrop()
+                                            .into(contact02);
+                                } else if (i == 2) {
+                                    //urlcontact3 = "http://10.24.9.6:8080/sigem_files/" + photo;
+                                    urlcontact3 = "http://www.ocrm.gob.pe/sigem_files/" + photo;
+                                    Glide.with(getContext())
+                                            .load(urlcontact3)
+                                            .crossFade()
+                                            .centerCrop()
+                                            .into(contact03);
+                                } else if (i == 4) {
+                                    //urlcontact4 = "http://10.24.9.6:8080/sigem_files/" + photo;
+                                    urlcontact4 = "http://www.ocrm.gob.pe/sigem_files/" + photo;
+                                    Glide.with(getContext())
+                                            .load(urlcontact4)
+                                            .crossFade()
+                                            .centerCrop()
+                                            .into(contact04);
+                                } else if (i == 5) {
+                                    //urlcontact5 = "http://10.24.9.6:8080/sigem_files/" + photo;
+                                    urlcontact5 = "http://www.ocrm.gob.pe/sigem_files/" + photo;
+                                    Glide.with(getContext())
+                                            .load(urlcontact5)
+                                            .crossFade()
+                                            .centerCrop()
+                                            .into(contact05);
+                                }
+
 
                             }
                             //JSONObject jresponse = response.getJSONObject(0);

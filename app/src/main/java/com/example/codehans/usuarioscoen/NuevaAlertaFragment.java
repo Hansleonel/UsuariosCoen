@@ -16,6 +16,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +49,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,9 +68,17 @@ import java.util.Map;
 public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     public static final String TAG = "LOCALIZACION";
-    public static final String URL = "http://10.24.9.6:8080/sigem/api/reporte-ciudadanos";
-    public static final String URL_TIPOEVENTO = "http://10.24.9.6:8080/sigem/api/tipo-eventos";
-    //public static final String TOKEN = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOLFJPTEVfVVNFUiIsImV4cCI6MTUwODQ0MTI2MX0.EMyUJ77RpKLyB_xKOurLDcq7wYZpj8d11APDGxctujHdXqi8gHpsiqenUj1VtHNKdS-IiOwXmXWfTx0hjDfxwg";
+    //public static final String URL = "http://10.24.9.6:8080/sigem/api/reporte-ciudadanos";
+    //public static final String URL_CONTACTOS = "http://10.24.9.6:8080/sigem/api/contactos";
+    //public static final String URL_CONTACTOS_BY_USER = "http://10.24.9.6:8080/sigem/api/contactosByCiudadano";
+
+
+    public static final String URL = "http://www.ocrm.gob.pe/sigem/api/reporte-ciudadanos";
+    public static final String URL_CONTACTOS = "http://www.ocrm.gob.pe/sigem/api/contactos";
+    public static final String URL_CONTACTOS_BY_USER = "http://www.ocrm.gob.pe/sigem/api/contactosByCiudadano";
+    public static final String URL_TIPOEVENTO = "http://www.ocrm.gob.pe/sigem/api/tipo-eventos";
+
+
     private static final int PETICION_PERMISO_LOCALIZACION = 101;
     private EditText editText_ubicacion;
     private EditText editText_message;
@@ -89,7 +101,12 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
         SharedPreferences pref = getActivity().getSharedPreferences("TOKENSHAREFILE", Context.MODE_PRIVATE);
         TOKEN = pref.getString("TOKENSTRING", "ERROR");
 
-        tipos_eventos();
+        //tipos_eventos();
+        permisos();
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat nformat = new SimpleDateFormat("dd-MM-yyyy");
+        String date = nformat.format(c.getTime());
+
 
         editText_ubicacion = (EditText) relativeLayout.findViewById(R.id.edtV_Ubicacion);
         editText_message = (EditText) relativeLayout.findViewById(R.id.edtV_Message);
@@ -106,7 +123,7 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
         });
 
 
-        String[] emergency = new String[]{"Inundacion", "Huayco", "Terremoto"};
+        String[] emergency = new String[]{"TIPO EVENTO 1", "TIPO EVENTO 2", "TIPO EVENTO 3", "TIPO EVENTO 4"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, emergency);
         spinner_tipoE.setAdapter(adapter);
 
@@ -173,22 +190,30 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
     private void envio_reporte_alerta(final View v) {
 
         String message = editText_message.getText().toString();
+        String lugar = editText_ubicacion.getText().toString();
         Double lat = Double.parseDouble(LATI);
         Double lng = Double.parseDouble(LONGI);
         //Toast.makeText(getApplicationContext()," "+TOKEN,Toast.LENGTH_LONG).show();
 
+        JSONObject jsTipoEvento = new JSONObject();
+        try {
+            jsTipoEvento.put("createdDate", "2017-09-29T15:27:25Z");
+            jsTipoEvento.put("estado", "ACTIVO");
+            jsTipoEvento.put("idTipoEvento", 1);
+            jsTipoEvento.put("descripcion", "TIPO EVENTO 1");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         JSONObject js = new JSONObject();
         try {
-            //js.put("descripcion", "DDDDD");
             js.put("descripcion", message);
-            //js.put("lugar","nombreLugar");
+            js.put("lugar", lugar);
             js.put("estado", "ACTIVO");
             js.put("fecha", "2017-08-19");
-            //js.put("longitud", 222.1);
-            //js.put("estado", "ACTIVO");
             js.put("latitud", lat);
-            //js.put("latitud", 22.2);
             js.put("longitud", lng);
+            js.put("tipo", jsTipoEvento);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -203,6 +228,7 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
                         try {
                             Log.d("RESPONSE CORRECTO", response.get("idRepCiudadano") + " i am queen");
                             Toast.makeText(getContext(), "LA ALERTA HA SIDO ENVIADA", Toast.LENGTH_LONG).show();
+                            enviar_mensajes_contactos();
                             //Snackbar.make(v,"CONFIRMA TU PASSWORD CON",Snackbar.LENGTH_INDEFINITE).setAction("LOGIN",new View.OnClickListener(){
                             //  @Override
                             //public void onClick(View v) {
@@ -234,6 +260,149 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
         };
         // Adding request to request queue
         Volley.newRequestQueue(getContext()).add(jsonObjReq);
+    }
+
+    private void enviar_mensajes_contactos() {
+
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET, URL_CONTACTOS_BY_USER, null,
+
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject jrJsonObject = response.getJSONObject(i);
+                                String numero = jrJsonObject.getString("nroCelular");
+                                String photo = jrJsonObject.getString("photo");
+                                String alias = jrJsonObject.getString("alias");
+                                Log.d("ON RESULT GETCONTACTS", "onResponse: " + numero + photo);
+                                enviar_sms(numero, alias);
+                            }
+                            //JSONObject jresponse = response.getJSONObject(0);
+                            //String descripcion = jresponse.getString("latitud");
+                            //Double latitud = Double.parseDouble(descripcion);
+                            //Log.d("DESCRIPCION", latitud + " size " + response.length());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("eRRor Response", "Error: " + error.toString());
+                //Toast.makeText(getContext(), "" + error.toString(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("Authorization", "Bearer " + TOKEN);
+                return headers;
+            }
+        };
+
+        // Adding request to request queue
+        Volley.newRequestQueue(getContext()).add(jsonArrayRequest);
+
+    }
+
+    private void enviar_sms(String numero, String alias) {
+        String nombre_contacto = alias;
+        String numero_contacto = numero;
+        String mensaje = "Hola" + nombre_contacto + " Eh enviado un mensaje de emergencia desde" + editText_ubicacion ;
+
+
+        try {
+            int permissionChek = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.SEND_SMS);
+            if (permissionChek != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getContext(), "NO SE TIENEN LOS PERMISOS NECESARIOS", Toast.LENGTH_LONG).show();
+            } else {
+                Log.d("MENSAJE DE TEXTO", "enviar_sms: SE TIENE PERMISOS");
+            }
+
+            SmsManager sms = SmsManager.getDefault();
+            sms.sendTextMessage(numero_contacto, null, mensaje, null, null);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "MENSAJE NO ENVIADO ERROR", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
+
+    private void permisos() {
+
+        int permissionCheck = ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.SEND_SMS);
+
+        if (ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.SEND_SMS)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.SEND_SMS},
+                        1002);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+
+            case 2909: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.e("Permission", "Granted");
+                } else {
+                    Log.e("Permission", "Denied");
+                }
+                break;
+            }
+            case 1: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+                        Toast.makeText(getContext(), "PERMISO OTORGADO", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getContext(), "PERMISO NO OTORGADO", Toast.LENGTH_LONG).show();
+                    }
+                }
+                break;
+            }
+            case 1002: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+        }
+
     }
 
     @Override
