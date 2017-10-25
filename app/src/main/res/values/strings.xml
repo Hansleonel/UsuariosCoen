@@ -34,5 +34,6 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="save">Guardar</string>
-    <string name="URL_BASE">http://10.24.9.6:8080/sigem/api</string>
+    <string name="url_private">http://10.24.9.78:1010/sigem/api/</string>
+    <string name="url_public">http://www.ocrm.gob.pe/sigem/api/</string>
 </resources>

@@ -121,7 +121,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                 aiService.startListening();
                 //String predio = editText_visualizar.getText().toString();
                 //if (predio.startsWith("MAR")) {
-                //    Mostrar_Predios_MarinaGuerra();
+                    //Mostrar_Predios_MarinaGuerra();
                 //} else if (predio.startsWith("EJE")) {
                 //    Mostrar_Predios_Ejercito();
                 //} else if (predio.startsWith("FU")) {
@@ -266,7 +266,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                                 String entidad = jrJsonObject.getString("entidad");
                                 Double lat = Double.parseDouble(latitud);
                                 Double longit = Double.parseDouble(longitud);
-                                MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(entidad).snippet(entidad).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_y)));
+                                MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(entidad).snippet(entidad).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_centro_ayuda)));
                             }
                             //JSONObject jresponse = response.getJSONObject(0);
                             //String descripcion = jresponse.getString("latitud");
@@ -413,7 +413,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
-                            for (int i = 0; i < 200; i++) {
+                            for (int i = 0; i < response.length(); i++) {
                                 JSONObject jrJsonObject = response.getJSONObject(i);
                                 String latitud = jrJsonObject.getString("latitud");
                                 String longitud = jrJsonObject.getString("longitud");
@@ -422,7 +422,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                                 if (Entidad.startsWith("FUERZA")) {
                                     Double lat = Double.parseDouble(latitud);
                                     Double longit = Double.parseDouble(longitud);
-                                    MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(Entidad).snippet(Descripicion).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_g)));
+                                    MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(Entidad).snippet(Descripicion).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_aerea)));
                                 }
                             }
                             //JSONObject jresponse = response.getJSONObject(0);
@@ -471,7 +471,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
-                            for (int i = 0; i < 200; i++) {
+                            for (int i = 0; i < response.length(); i++) {
                                 JSONObject jrJsonObject = response.getJSONObject(i);
                                 String latitud = jrJsonObject.getString("latitud");
                                 String longitud = jrJsonObject.getString("longitud");
@@ -480,7 +480,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                                 if (Entidad.startsWith("MA")) {
                                     Double lat = Double.parseDouble(latitud);
                                     Double longit = Double.parseDouble(longitud);
-                                    MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(Entidad).snippet(Descripicion).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_g)));
+                                    MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(Entidad).snippet(Descripicion).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_marina)));
                                 }
                             }
                             //JSONObject jresponse = response.getJSONObject(0);
@@ -539,7 +539,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
 
                                     Double lat = Double.parseDouble(latitud);
                                     Double longit = Double.parseDouble(longitud);
-                                    MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(Entidad).snippet(Descripicion).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_g)));
+                                    MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(Entidad).snippet(Descripicion).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_ejercito)));
                                 }
                             }
                             //JSONObject jresponse = response.getJSONObject(0);

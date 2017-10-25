@@ -119,6 +119,7 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
                 //Intent i = new Intent(getContext(), ReceiptActivity.class);
                 //startActivity(i);
                 envio_reporte_alerta(v);
+                enviar_sms("992890929","Anny");
             }
         });
 
@@ -277,7 +278,7 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
                                 String photo = jrJsonObject.getString("photo");
                                 String alias = jrJsonObject.getString("alias");
                                 Log.d("ON RESULT GETCONTACTS", "onResponse: " + numero + photo);
-                                enviar_sms(numero, alias);
+                                //enviar_sms(numero, alias);
                             }
                             //JSONObject jresponse = response.getJSONObject(0);
                             //String descripcion = jresponse.getString("latitud");
@@ -328,7 +329,7 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
             }
 
             SmsManager sms = SmsManager.getDefault();
-            sms.sendTextMessage(numero_contacto, null, mensaje, null, null);
+            sms.sendTextMessage("992890929", null, mensaje, null, null);
         } catch (Exception e) {
             Toast.makeText(getContext(), "MENSAJE NO ENVIADO ERROR", Toast.LENGTH_LONG).show();
             e.printStackTrace();

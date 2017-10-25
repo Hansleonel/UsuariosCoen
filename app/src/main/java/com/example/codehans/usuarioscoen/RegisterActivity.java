@@ -69,6 +69,14 @@ public class RegisterActivity extends AppCompatActivity {
         final String mail = edtV_mail.getText().toString().trim();
         final String password = edtV_Password.getText().toString().trim();
         final String nacimiento = edtV_mail.getText().toString().trim();
+        String nacimiento_formato_register;
+
+        String[] parts = nacimiento.split("/");
+        String dia = parts[0];
+        String mes = parts[1];
+        String anho = parts[2];
+
+        nacimiento_formato_register = anho+"-"+mes+"-"+dia;
 
         final String[] idUser = {" "};
         final String[] userName = {" "};
@@ -83,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
             js.put("username", dni);
             js.put("nroCelular", numero);
             //js.put("email", mail);
-            js.put("fechaNacimiento",nacimiento);
+            js.put("fechaNacimiento", nacimiento_formato_register);
             js.put("password", password);
             //js.put("langKey", "es");
         } catch (JSONException e) {
@@ -121,8 +129,9 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                         Intent intentPerfil = new Intent(RegisterActivity.this, PerfilActivity.class);
                         intentPerfil.putExtra("idUser", idUser[0]);
-                        intentPerfil.putExtra("userName",userName[0]);
-                        intentPerfil.putExtra("nroCelular",nroCelular[0]);
+                        intentPerfil.putExtra("userName", userName[0]);
+                        intentPerfil.putExtra("nroCelular", nroCelular[0]);
+                        intentPerfil.putExtra("nacimiento", nacimiento);
                         //intentPerfil.putExtra("email",email[0]);
                         //Toast.makeText(getApplicationContext(),idUser[0],Toast.LENGTH_LONG).show();
                         startActivity(intentPerfil);

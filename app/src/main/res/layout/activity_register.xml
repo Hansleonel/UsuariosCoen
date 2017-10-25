@@ -54,7 +54,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/edt_cstm"
         android:hint="Fecha Nacimiento"
-        android:inputType="textEmailAddress"
+        android:inputType="date"
         android:textAlignment="center" />
 
     <EditText

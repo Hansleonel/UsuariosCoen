@@ -35,12 +35,14 @@ public class PerfilActivity extends AppCompatActivity {
     private Button btn_aceptar_perfil;
     //public static final String URL_CIUDADANOS = "http://10.24.9.6:8080/sigem/api/ciudadanos";
     public static final String URL_CIUDADANOS = "http://www.ocrm.gob.pe/sigem/api/ciudadanos";
+    public static final String URL_DNI_RENIEC = "http://www.ocrm.gob.pe/sigem/api/verificarDni";
     //public static final String URL_CIUDADANOS = "https://sistemas.mindef.gob.pe/sigem/api/ciudadanos";
 
     private String idUserPerfil;
     private String userNamePerfil;
     private String emailPerfil;
     private String nroCelular;
+    private String nacimiento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +55,18 @@ public class PerfilActivity extends AppCompatActivity {
         btn_aceptar_perfil = (Button) findViewById(R.id.Aceptar_perfil);
         photo_perfil = (ImageView) findViewById(R.id.imgV_PhotoPerfil);
 
+
         Intent in = getIntent();
         idUserPerfil = in.getStringExtra("idUser");
         userNamePerfil = in.getStringExtra("userName");
         //emailPerfil = in.getStringExtra("email");
         nroCelular = in.getStringExtra("nroCelular");
+        nacimiento = in.getStringExtra("nacimiento");
         //Toast.makeText(getApplicationContext()," "+TOKEN,Toast.LENGTH_LONG).show();
 
         //edtV_email_perfil.setText(emailPerfil);
+
+        verificar_dni(userNamePerfil, nacimiento);
 
         btn_aceptar_perfil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +79,61 @@ public class PerfilActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    private void verificar_dni(String idUserPerfil, String nacimientoPerfil) {
+
+        JSONObject js1 = new JSONObject();
+        try {
+            js1.put("codeValidation","mindef$2017&COEN");
+            js1.put("dni", idUserPerfil);
+            js1.put("fechaNacimiento",nacimientoPerfil);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                Request.Method.POST, URL_DNI_RENIEC, js1,
+
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.d("ON RESPONSE CIUDADANOS", response.get("dni") + " i am queen");
+                            String nombres = response.get("nombres").toString();
+                            String apellidos = response.get("apPaterno").toString()+" "+response.get("apMaterno").toString();
+                            //Toast.makeText(PerfilActivity.this, "CIUDADANO REGISTRADO", Toast.LENGTH_LONG).show();
+                            edtV_nombre_perfil.setText(nombres);
+                            edtV_apellido_perfil.setText(apellidos);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "HUBO UN ERROR CON LA INSCRIPCION", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("ON DNI RENIEC RESPONSE", "Error: " + error.toString());
+                Toast.makeText(PerfilActivity.this," ERORR "+error.toString(),Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+
+        // Adding request to request queue
+        Volley.newRequestQueue(this).add(jsonObjReq);
 
     }
 
