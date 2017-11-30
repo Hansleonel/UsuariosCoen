@@ -9,6 +9,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -92,6 +93,9 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
     public String LONGI = " ";
     String TOKEN = " ";
 
+    private String numeroEnvioAsincTask = " ";
+    private String aliasEnvioAsincTask = " ";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -119,9 +123,12 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
                 //Intent i = new Intent(getContext(), ReceiptActivity.class);
                 //startActivity(i);
                 envio_reporte_alerta(v);
-                enviar_sms("992890929","Anny");
+                //enviar_sms("992890929","Anny");
+                //SendSmsAsyncTask a = new SendSmsAsyncTask();
+                //a.execute();
             }
         });
+
 
 
         String[] emergency = new String[]{"TIPO EVENTO 1", "TIPO EVENTO 2", "TIPO EVENTO 3", "TIPO EVENTO 4"};
@@ -277,8 +284,12 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
                                 String numero = jrJsonObject.getString("nroCelular");
                                 String photo = jrJsonObject.getString("photo");
                                 String alias = jrJsonObject.getString("alias");
+                                numeroEnvioAsincTask = numero;
+                                aliasEnvioAsincTask = alias;
                                 Log.d("ON RESULT GETCONTACTS", "onResponse: " + numero + photo);
-                                //enviar_sms(numero, alias);
+                                enviar_sms(numero, alias);
+                                SendSmsAsyncTask a = new SendSmsAsyncTask();
+                                a.execute();
                             }
                             //JSONObject jresponse = response.getJSONObject(0);
                             //String descripcion = jresponse.getString("latitud");
@@ -314,10 +325,25 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
 
     }
 
+    private class SendSmsAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            enviar_sms(numeroEnvioAsincTask, aliasEnvioAsincTask);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Toast.makeText(getContext(), "SE ENVIO EL MENSAJE EN ASYNCTASK", Toast.LENGTH_LONG).show();
+            super.onPostExecute(aVoid);
+        }
+    }
+
     private void enviar_sms(String numero, String alias) {
         String nombre_contacto = alias;
         String numero_contacto = numero;
-        String mensaje = "Hola" + nombre_contacto + " Eh enviado un mensaje de emergencia desde" + editText_ubicacion ;
+        String mensaje = "Hola" + nombre_contacto + " NUEVO FORMATO DE ENVIO DE MENSAJE";
 
 
         try {
@@ -329,7 +355,8 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
             }
 
             SmsManager sms = SmsManager.getDefault();
-            sms.sendTextMessage("992890929", null, mensaje, null, null);
+            sms.sendTextMessage(numero_contacto, null, mensaje, null, null);
+            //finish();
         } catch (Exception e) {
             Toast.makeText(getContext(), "MENSAJE NO ENVIADO ERROR", Toast.LENGTH_LONG).show();
             e.printStackTrace();
@@ -449,12 +476,13 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
             //editText_ubicacion.setText("Latitud: " + String.valueOf(location.getLatitude()) + " Longitud" + String.valueOf(location.getLongitude()));
             editText_ubicacion.setText(" " + address + " " + city);
             Toast.makeText(getContext(), "DIRECCION " + address, Toast.LENGTH_LONG).show();
-            LATI = String.valueOf(location.getLongitude());
-            LONGI = String.valueOf(location.getLatitude());
+            LATI = String.valueOf(location.getLatitude());
+            LONGI = String.valueOf(location.getLongitude());
         } else {
             editText_ubicacion.setText("Latitud: (desconocida) " + "Longitud: (desconocida)");
         }
     }
+
 
     @Override
     public void onConnectionSuspended(int i) {

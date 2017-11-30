@@ -36,4 +36,6 @@
     <string name="save">Guardar</string>
     <string name="url_private">http://10.24.9.78:1010/sigem/api/</string>
     <string name="url_public">http://www.ocrm.gob.pe/sigem/api/</string>
+    <string name="title_activity_evento_detalle">EventoDetalleActivity</string>
+    <string name="title_activity_centro_acopio">CentroAcopioActivity</string>
 </resources>

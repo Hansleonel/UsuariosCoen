@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".EventoDetalleActivity"
+    tools:showIn="@layout/activity_evento_detalle">
+
+    <TabHost
+        android:id="@+id/TabHostEventoDetalle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/tab1_evento_detalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <fragment
+                        android:id="@+id/map_predio_detalle1"
+                        android:name="com.google.android.gms.maps.MapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/txtV_Titulo_Evento"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginTop="20dp"
+                                android:text="Detalles"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/txtV_eventoDetalle_ciudad"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginTop="20dp"
+                                android:drawableLeft="@drawable/ic_location_city_black_24dp"
+                                android:drawableStart="@drawable/ic_location_city_black_24dp"
+                                android:drawableTint="@color/colorPrimary"
+                                android:text="  Ciudad:"
+                                android:textColor="@android:color/black" />
+
+                            <TextView
+                                android:id="@+id/txtV_eventoDetalle_prioridad"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginTop="20dp"
+                                android:drawableLeft="@drawable/ic_priority_high_black_24dp"
+                                android:drawableStart="@drawable/ic_priority_high_black_24dp"
+                                android:drawableTint="@color/colorPrimary"
+                                android:text="  Prioridad:"
+                                android:textColor="@android:color/black" />
+
+                            <TextView
+                                android:id="@+id/txtV_eventoDetalle_estado"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginTop="20dp"
+                                android:drawableLeft="@drawable/ic_assignment_turned_in_black_24dp"
+                                android:drawableStart="@drawable/ic_assignment_turned_in_black_24dp"
+                                android:drawableTint="@color/colorPrimary"
+                                android:text="  Estado:"
+                                android:textColor="@android:color/black" />
+
+                            <TextView
+                                android:id="@+id/txtV_eventoDetalle_descripcion"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginTop="20dp"
+                                android:drawableLeft="@drawable/ic_description_black_24dp"
+                                android:drawableStart="@drawable/ic_description_black_24dp"
+                                android:drawableTint="@color/colorPrimary"
+                                android:text="  Descripcion:"
+                                android:textColor="@android:color/black" />
+
+                            <TextView
+                                android:id="@+id/txtV_eventoDetalle_fechai"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginTop="20dp"
+                                android:drawableLeft="@drawable/ic_date_range_black_24dp"
+                                android:drawableStart="@drawable/ic_date_range_black_24dp"
+                                android:drawableTint="@color/colorPrimary"
+                                android:text="  Fecha de Inicio:"
+                                android:textColor="@android:color/black" />
+
+                            <TextView
+                                android:id="@+id/txtV_eventoDetalle_fechaf"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginTop="20dp"
+                                android:drawableLeft="@drawable/ic_date_range_black_24dp"
+                                android:drawableStart="@drawable/ic_date_range_black_24dp"
+                                android:drawableTint="@color/colorPrimary"
+                                android:text="  Fecha de conlcusion:"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </ScrollView>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/tab2_evento_detalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </LinearLayout>
+    </TabHost>
+</LinearLayout>

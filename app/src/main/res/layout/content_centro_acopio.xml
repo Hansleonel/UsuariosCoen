@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".CentroAcopioActivity"
+    tools:showIn="@layout/activity_centro_acopio">
+
+    <TabHost
+        android:id="@+id/TabHostCentroAcopio"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/tab1_centroAcopio"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <fragment
+                        android:id="@+id/map_centroAcopio"
+                        android:name="com.google.android.gms.maps.MapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <ScrollView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginTop="20dp"
+                                android:text="Detalles Centro de Acopio"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/txtV_CentroAcopio_Tipo"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginTop="20dp"
+                                android:drawableLeft="@drawable/ic_add_circle_black_24dp"
+                                android:drawableStart="@drawable/ic_add_circle_black_24dp"
+                                android:drawableTint="@color/colorPrimary"
+                                android:text="  Tipo de Ayuda Ofrecida:"
+                                android:textColor="@android:color/black" />
+
+                            <TextView
+                                android:id="@+id/txtV_CentroAcopio_Contacto"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginTop="20dp"
+                                android:drawableLeft="@drawable/ic_contact_phone_black_24dp"
+                                android:drawableStart="@drawable/ic_contact_phone_black_24dp"
+                                android:drawableTint="@color/colorPrimary"
+                                android:text="  Contacto:"
+                                android:textColor="@android:color/black" />
+
+                            <TextView
+                                android:id="@+id/txtV_CentroAcopio_Telefono"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginTop="20dp"
+                                android:drawableLeft="@drawable/ic_phone_black_24dp"
+                                android:drawableStart="@drawable/ic_phone_black_24dp"
+                                android:drawableTint="@color/colorPrimary"
+                                android:text="  Telefono:"
+                                android:textColor="@android:color/black" />
+
+                            <TextView
+                                android:id="@+id/txtV_CentroAcopio_Direccion"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginTop="20dp"
+                                android:drawableLeft="@drawable/ic_home_black_24dp"
+                                android:drawableStart="@drawable/ic_home_black_24dp"
+                                android:drawableTint="@color/colorPrimary"
+                                android:text="  Direccion:"
+                                android:textColor="@android:color/black" />
+
+                            <TextView
+                                android:id="@+id/txtV_CentroAcopio_Entidad"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginTop="20dp"
+                                android:drawableLeft="@drawable/ic_check_circle_black_24dp"
+                                android:drawableStart="@drawable/ic_check_circle_black_24dp"
+                                android:drawableTint="@color/colorPrimary"
+                                android:text="  Entidad:"
+                                android:textColor="@android:color/black" />
+
+
+                        </LinearLayout>
+                    </ScrollView>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab2_centroAcopio"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/RecView_CentroAcopio_Insumos"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </android.support.v7.widget.RecyclerView>
+
+
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+
+</LinearLayout>

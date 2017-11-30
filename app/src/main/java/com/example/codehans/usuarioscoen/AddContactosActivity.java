@@ -344,7 +344,6 @@ public class AddContactosActivity extends AppCompatActivity {
 
                         Log.d("BITMAP TO BASE 64", "onActivityResult: " + imageString);
 
-
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -2,8 +2,10 @@ package com.example.codehans.usuarioscoen;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -32,6 +35,9 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,7 +48,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,7 +75,7 @@ import ai.api.model.Result;
  * Use the {@link MapasFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapasFragment extends Fragment implements OnMapReadyCallback, AIListener {
+public class MapasFragment extends Fragment implements OnMapReadyCallback, AIListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     //public static final String URL = "http://10.24.9.6:8080/sigem/api/predioffaasCustom";
     //public static final String URLACOP = "http://10.24.9.6:8080/sigem/api/centroAcopioCustom";
@@ -75,7 +83,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
 
     public static final String URL = "http://www.ocrm.gob.pe/sigem/api/predioffaasCustom";
     public static final String URLACOP = "http://www.ocrm.gob.pe/sigem/api/centroAcopioCustom";
-    public static final String URLEVENTOS = "http://www.ocrm.gob.pe/sigem/api/eventoCustom";
+    public static final String URLEVENTOS = "http://www.ocrm.gob.pe/sigem/api/eventoByCiudadano";
 
     //todo: PARA EL USO DE MAPS RECUERDA EL USO DEL KEY ADEMAS DE IMPLEMENTAR
     //todo: el OnMapReadyCallB
@@ -84,9 +92,16 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
     MapView mapView;
     View view;
     public static final int LOCATION_REQUEST_CODE = 1;
+    private static final int PETICION_PERMISO_LOCALIZACION = 101;
     String TOKEN = " ";
+    int idEventoFromTag;
+    int mapinteger = 1;
     private FloatingActionButton floatingActionButton;
     private EditText editText_visualizar;
+
+    private GoogleApiClient apiClient;
+    String Latitud = "-12.066377";
+    String Longitud = "-77.040867";
 
     AIService aiService;
 
@@ -95,6 +110,8 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_mapas, container, false);
+
+        //todo RECUPERANDO TOKEN
         SharedPreferences pref = getActivity().getSharedPreferences("TOKENSHAREFILE", Context.MODE_PRIVATE);
         TOKEN = pref.getString("TOKENSTRING", "ERROR");
         //Toast.makeText(getContext(), " " + TOKEN, Toast.LENGTH_LONG).show();
@@ -111,6 +128,11 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
 
         //editText_visualizar = (EditText) view.findViewById(R.id.edtV_ver);
 
+        apiClient = new GoogleApiClient.Builder(getContext())
+                .enableAutoManage((FragmentActivity) getContext(), this)
+                .addConnectionCallbacks(this)
+                .addApi(LocationServices.API).build();
+
 
         //todo FloatingButton dentro del fragment no es totalment recomendado
         floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fab_map);
@@ -121,7 +143,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                 aiService.startListening();
                 //String predio = editText_visualizar.getText().toString();
                 //if (predio.startsWith("MAR")) {
-                    //Mostrar_Predios_MarinaGuerra();
+                //Mostrar_Predios_MarinaGuerra();
                 //} else if (predio.startsWith("EJE")) {
                 //    Mostrar_Predios_Ejercito();
                 //} else if (predio.startsWith("FU")) {
@@ -136,11 +158,18 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
             }
         });
 
-
         return view;
 
     }
 
+    //todo USAR PARA DETENER EL SERVICIO DE LOCATION Y PASAR A OTRO FRAGMENT
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        apiClient.stopAutoManage(getActivity());
+        apiClient.disconnect();
+
+    }
 
     private void Mostrar_Eventos() {
 
@@ -149,20 +178,21 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
         //todo Para los JSONARRAY usamos este metodo
         //todo Verificar que no es igual al metodo de alerta donde solo se obtiene como respuesta un Jsonobjet
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET, URLEVENTOS, null,
+                Request.Method.GET, URLEVENTOS + "/" + Latitud + "/" + Longitud + "/100", null,
 
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
-                            for (int i = 0; i < 200; i++) {
+                            for (int i = 0; i < response.length(); i++) {
                                 JSONObject jrJsonObject = response.getJSONObject(i);
+                                int idEvento = jrJsonObject.getInt("idEvento");
                                 String latitud = jrJsonObject.getString("latitud");
                                 String longitud = jrJsonObject.getString("longitud");
-                                String Descripicion = jrJsonObject.getString("descripcion");
+                                String Descripicion = jrJsonObject.getString("descripEvento");
                                 Double lat = Double.parseDouble(latitud);
                                 Double longit = Double.parseDouble(longitud);
-                                MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(Descripicion).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher)));
+                                MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(Descripicion).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher))).setTag(idEvento);
                             }
                             //JSONObject jresponse = response.getJSONObject(0);
                             //String descripcion = jresponse.getString("latitud");
@@ -170,6 +200,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                             //Log.d("DESCRIPCION", latitud + " size " + response.length());
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Toast.makeText(getContext(), "error response" + e.toString(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -177,7 +208,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d("eRRor Response", "Error: " + error.toString());
-                Toast.makeText(getContext(), "" + error.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "ON MOSTRAR EVENTOS" + error.toString(), Toast.LENGTH_LONG).show();
             }
         }) {
 
@@ -244,6 +275,49 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
         Mostrar_Centro_Acopio();
         //todo MOSTRANDO EVENTOS
         Mostrar_Eventos();
+
+        MgoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+
+                idEventoFromTag = Integer.parseInt(String.valueOf(marker.getTag()));
+                if (idEventoFromTag > 0) {
+                    mapinteger = mapinteger + 1;
+                    if (mapinteger % 2 == 1) {
+                        Intent i = new Intent(getContext(), EventoDetalleActivity.class);
+                        //i.putExtra("idEvento", idEventoFromTag);
+                        i.putExtra("idEvento", marker.getTag().toString());
+                        startActivity(i);
+                    }
+                } else if (idEventoFromTag == -2) {
+                    Intent i = new Intent(getContext(), CentroAcopioActivity.class);
+                    i.putExtra("idCentroAcopio", marker.getTitle());
+                    startActivity(i);
+                }
+
+
+                return false;
+            }
+        });
+    }
+
+    private void updateUI(Location location) {
+        if (location != null) {
+            Latitud = String.valueOf(location.getLatitude());
+            Longitud = String.valueOf(location.getLongitude());
+            Toast.makeText(getContext(), "la latitud y la longitud" + String.valueOf(location.getLatitude()) + String.valueOf(location.getLongitude()), Toast.LENGTH_LONG).show();
+
+            SharedPreferences prefs = getActivity().getSharedPreferences("LOCATIONFILE", getContext().MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("LOCATIONLATITUD", Latitud);
+            editor.putString("LOCATIONLONGITUD", Longitud);
+            editor.commit();
+        } else {
+            Toast.makeText(getContext(), "latitud y longitud desconocida activa tu gps", Toast.LENGTH_LONG).show();
+        }
+        apiClient.stopAutoManage(getActivity());
+        apiClient.disconnect();
+
     }
 
     private void Mostrar_Centro_Acopio() {
@@ -260,13 +334,13 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                         try {
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject jrJsonObject = response.getJSONObject(i);
+                                String idCentroAcopio = jrJsonObject.getString("idCentroAcopio");
                                 String latitud = jrJsonObject.getString("latitud");
                                 String longitud = jrJsonObject.getString("longitud");
-                                //String predio = jrJsonObject.getString("predio");
                                 String entidad = jrJsonObject.getString("entidad");
                                 Double lat = Double.parseDouble(latitud);
                                 Double longit = Double.parseDouble(longitud);
-                                MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(entidad).snippet(entidad).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_centro_ayuda)));
+                                MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(idCentroAcopio).snippet(entidad).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_centro_ayuda))).setTag(-2);
                             }
                             //JSONObject jresponse = response.getJSONObject(0);
                             //String descripcion = jresponse.getString("latitud");
@@ -281,7 +355,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d("eRRor Response", "Error: " + error.toString());
-              //  Toast.makeText(getContext(), "" + error.toString(), Toast.LENGTH_LONG).show();
+                //  Toast.makeText(getContext(), "" + error.toString(), Toast.LENGTH_LONG).show();
             }
         }) {
 
@@ -337,7 +411,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d("eRRor Response", "Error: " + error.toString());
-                Toast.makeText(getContext(), "" + error.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "ON PREDIOS" + error.toString(), Toast.LENGTH_LONG).show();
             }
         }) {
 
@@ -366,20 +440,38 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                     permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION) &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(getContext(), "PERMISOS ASIGNADOS", Toast.LENGTH_LONG).show();
-
             } else {
                 Toast.makeText(getContext(), "Error de permisos", Toast.LENGTH_LONG).show();
             }
 
+        }
+        if (requestCode == PETICION_PERMISO_LOCALIZACION) {
+            if (grantResults.length == 1
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                //Permiso concedido
+
+                @SuppressWarnings("MissingPermission")
+                Location lastLocation =
+                        LocationServices.FusedLocationApi.getLastLocation(apiClient);
+
+                updateUI(lastLocation);
+
+            } else {
+                //Permiso denegado:
+                //Deberíamos deshabilitar toda la funcionalidad relativa a la localización.
+
+                Log.e("ON PERMISOS", "Permiso denegado");
+            }
         }
     }
 
     @Override
     public void onResult(AIResponse response) {
         //todo USANDO AI PARA FILTRAR
-        Log.d("RESPONSE", "onResult: " + response.toString());
+        Log.d("RESPONSE AI", "onResult: " + response.toString());
         Result result01 = response.getResult();
-        Toast.makeText(getContext(), "QUERY" + result01.getResolvedQuery() + " ACTION" + result01.getAction() + " RESULTADO" + result01.toString(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(), "QUERY" + result01.getResolvedQuery() + " ACTION" + result01.getAction() + " RESULTADO" + result01.toString(), Toast.LENGTH_LONG).show();
 
         String actionResult = result01.getAction();
         if (actionResult.equals("show.place")) {
@@ -438,7 +530,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d("eRRor Response", "Error: " + error.toString());
-                Toast.makeText(getContext(), "" + error.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "ON PREDIO FUERZA AEREA" + error.toString(), Toast.LENGTH_LONG).show();
             }
         }) {
 
@@ -496,7 +588,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d("eRRor Response", "Error: " + error.toString());
-                Toast.makeText(getContext(), "" + error.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "ON PREDIOS MARINA" + error.toString(), Toast.LENGTH_LONG).show();
             }
         }) {
 
@@ -576,6 +668,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
         aiService.stopListening();
     }
 
+
     @Override
     public void onError(AIError error) {
 
@@ -599,5 +692,32 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
     @Override
     public void onListeningFinished() {
         aiService.stopListening();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e("ON CONNECTION FAILED", "ERROR GRAVE AL CONECTAR A GOOGLE PLAY SERVICE");
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PETICION_PERMISO_LOCALIZACION);
+        } else {
+
+            Location lastLocation =
+                    LocationServices.FusedLocationApi.getLastLocation(apiClient);
+
+            updateUI(lastLocation);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
     }
 }
