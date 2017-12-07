@@ -7,4 +7,312 @@
     <!-- TODO: RECUERDA QUE CADA VEZ QUE MODIFIQUES EL TIPO DE LAYOUT
      TODO: DEBES DE CAMBIAR DICHO TIPO EN EL CODIGO -->
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/cardHerramientasConsejosT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:foreground="?attr/selectableItemBackground"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="2dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/img_HerramientasConsejosT"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_alignParentTop="true"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        android:id="@+id/txtV_TituloHerramientasConsejosT"
+                        style="@style/TextAppearance.AppCompat.Large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/img_HerramientasConsejosT"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        android:text="TERREMOTO"
+                        android:textColor="@color/colorPrimaryDark" />
+
+                    <TextView
+                        android:id="@+id/txtV_TextoHerramientasConsejosT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtV_TituloHerramientasConsejosT"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Que medidas tomar en caso se presente un terremoto sismo o movimiento telúrico." />
+
+                    <Button
+                        android:id="@+id/btn_verHerramientasConsejos"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtV_TextoHerramientasConsejosT"
+                        android:layout_margin="8dp"
+                        android:text="Ver"
+                        android:textColor="@color/colorAccent" />
+
+                    <Button
+                        android:id="@+id/btn_compartirHerramientasConsejos"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtV_TextoHerramientasConsejosT"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_toEndOf="@id/btn_verHerramientasConsejos"
+                        android:layout_toRightOf="@id/btn_verHerramientasConsejos"
+                        android:text="COMPARTIR"
+                        android:textColor="@color/colorAccent" />
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/cardHerramientasConsejosI"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:foreground="?attr/selectableItemBackground"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="2dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/img_HerramientasConsejosI"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_alignParentTop="true"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        android:id="@+id/txtV_TituloHerramientasConsejosI"
+                        style="@style/TextAppearance.AppCompat.Large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/img_HerramientasConsejosI"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        android:text="INUNDACIONES"
+                        android:textColor="@color/colorPrimaryDark" />
+
+                    <TextView
+                        android:id="@+id/txtV_TextoHerramientasConsejosI"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtV_TituloHerramientasConsejosI"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Que medidas tomar en caso se de un desbordamiento de ríos, torrentes, ramblas, o por lluvias torrenciales" />
+
+                    <Button
+                        android:id="@+id/btn_verHerramientasConsejosI"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtV_TextoHerramientasConsejosI"
+                        android:layout_margin="8dp"
+                        android:text="Ver"
+                        android:textColor="@color/colorAccent" />
+
+                    <Button
+                        android:id="@+id/btn_compartirHerramientasConsejosI"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtV_TextoHerramientasConsejosI"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_toEndOf="@id/btn_verHerramientasConsejosI"
+                        android:layout_toRightOf="@id/btn_verHerramientasConsejosI"
+                        android:text="COMPARTIR"
+                        android:textColor="@color/colorAccent" />
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/cardHerramientasConsejosH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:foreground="?attr/selectableItemBackground"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="2dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/img_HerramientasConsejosH"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_alignParentTop="true"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        android:id="@+id/txtV_TituloHerramientasConsejosH"
+                        style="@style/TextAppearance.AppCompat.Large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/img_HerramientasConsejosH"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        android:text="HUAYCOS"
+                        android:textColor="@color/colorPrimaryDark" />
+
+                    <TextView
+                        android:id="@+id/txtV_TextoHerramientasConsejosH"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtV_TituloHerramientasConsejosH"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Que medidas tomar en caso deslizamientos superficiales de detritos (rocas muy pequeñas que junto con el limo forman el barro) Huaycos." />
+
+                    <Button
+                        android:id="@+id/btn_verHerramientasConsejosH"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtV_TextoHerramientasConsejosH"
+                        android:layout_margin="8dp"
+                        android:text="Ver"
+                        android:textColor="@color/colorAccent" />
+
+                    <Button
+                        android:id="@+id/btn_compartirHerramientasConsejosH"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtV_TextoHerramientasConsejosH"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_toEndOf="@id/btn_verHerramientasConsejosH"
+                        android:layout_toRightOf="@id/btn_verHerramientasConsejosH"
+                        android:text="COMPARTIR"
+                        android:textColor="@color/colorAccent" />
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/cardHerramientasConsejosTs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:foreground="?attr/selectableItemBackground"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="2dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/img_HerramientasConsejosTs"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_alignParentTop="true"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        android:id="@+id/txtV_TituloHerramientasConsejosTs"
+                        style="@style/TextAppearance.AppCompat.Large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/img_HerramientasConsejosTs"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        android:text="TSUNAMIS"
+                        android:textColor="@color/colorPrimaryDark" />
+
+                    <TextView
+                        android:id="@+id/txtV_TextoHerramientasConsejosTs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtV_TituloHerramientasConsejosTs"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Que medidas tomar en caso encuntre olas de gran energía y de tamaño variable que se producen cuando algún fenómeno extraordinario desplaza verticalmente una gran masa de agua." />
+
+                    <Button
+                        android:id="@+id/btn_verHerramientasConsejosTs"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtV_TextoHerramientasConsejosTs"
+                        android:layout_margin="8dp"
+                        android:text="Ver"
+                        android:textColor="@color/colorAccent" />
+
+                    <Button
+                        android:id="@+id/btn_compartirHerramientasConsejosTs"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtV_TextoHerramientasConsejosTs"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_toEndOf="@id/btn_verHerramientasConsejosTs"
+                        android:layout_toRightOf="@id/btn_verHerramientasConsejosTs"
+                        android:text="COMPARTIR"
+                        android:textColor="@color/colorAccent" />
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+
 </RelativeLayout>

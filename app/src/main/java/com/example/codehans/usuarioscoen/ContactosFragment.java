@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -61,6 +62,13 @@ public class ContactosFragment extends Fragment {
     private String urlcontact4 = "";
     private String urlcontact5 = "";
     private String urlcenter;
+    private String usernamemessage = " ";
+    private String usernamemessage2 = " ";
+    private String usernamemessage3 = " ";
+    private String usernamemessage4 = " ";
+    private String usernamemessage5 = " ";
+
+    private TextView textView_UserNameContact;
     //private String URL_CONTACTOS_BY_CIUDADANO = "http://10.24.9.6:8080/sigem/api/contactosByCiudadano";
     private String URL_CONTACTOS_BY_CIUDADANO = "http://www.ocrm.gob.pe/sigem/api/contactosByCiudadano";
     private String TOKEN = "";
@@ -80,12 +88,14 @@ public class ContactosFragment extends Fragment {
         contact04 = (ImageView) linearLayout.findViewById(R.id.circleImageV_contact04);
         contact05 = (ImageView) linearLayout.findViewById(R.id.circleImageV_contact05);
         centerContact = (ImageView) linearLayout.findViewById(R.id.CircleImageV_Principal);
+        textView_UserNameContact = (TextView) linearLayout.findViewById(R.id.txtV_UserNameContact);
         floatingActionButton_contacts = (FloatingActionButton) linearLayout.findViewById(R.id.fab_contactos);
 
         floatingActionButton_contacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Enviar mensaje", Toast.LENGTH_LONG).show();
+                //enviar_mensaje_contactos();
             }
         });
 
@@ -148,6 +158,7 @@ public class ContactosFragment extends Fragment {
                             .crossFade()
                             .centerCrop()
                             .into(centerContact);
+                    textView_UserNameContact.setText("El usuario " + usernamemessage + " se conecto por ultima vez a las: ");
                 }
             }
         });
@@ -165,6 +176,7 @@ public class ContactosFragment extends Fragment {
                             .crossFade()
                             .centerCrop()
                             .into(centerContact);
+                    textView_UserNameContact.setText("El usuario " + usernamemessage2 + " se conecto por ultima vez a las: ");
                 }
             }
         });
@@ -182,6 +194,7 @@ public class ContactosFragment extends Fragment {
                             .crossFade()
                             .centerCrop()
                             .into(centerContact);
+                    textView_UserNameContact.setText("El usuario " + usernamemessage3 + " se conecto por ultima vez a las: ");
                 }
             }
         });
@@ -199,6 +212,7 @@ public class ContactosFragment extends Fragment {
                             .crossFade()
                             .centerCrop()
                             .into(centerContact);
+                    textView_UserNameContact.setText("El usuario " + usernamemessage4 + " se conecto por ultima vez a las: ");
                 }
             }
         });
@@ -216,6 +230,7 @@ public class ContactosFragment extends Fragment {
                             .crossFade()
                             .centerCrop()
                             .into(centerContact);
+                    textView_UserNameContact.setText("El usuario " + usernamemessage5 + " se conecto por ultima vez a las: ");
                 }
             }
         });
@@ -237,11 +252,13 @@ public class ContactosFragment extends Fragment {
                                 JSONObject jrJsonObject = response.getJSONObject(i);
                                 String numero = jrJsonObject.getString("nroCelular");
                                 String photo = jrJsonObject.getString("photo");
+                                String alias = jrJsonObject.getString("alias");
                                 Log.d("ON RESULT GETCONTACTS", "onResponse: " + numero + " " + photo);
 
                                 if (i == 0) {
                                     urlcontact = "http://www.ocrm.gob.pe/sigem_files/" + photo;
                                     //urlcontact = "http://10.24.9.6:8080/sigem_files/" + photo;
+                                    usernamemessage = alias;
                                     Glide.with(getContext())
                                             .load(urlcontact)
                                             .crossFade()
@@ -250,6 +267,7 @@ public class ContactosFragment extends Fragment {
                                 } else if (i == 1) {
                                     //urlcontact2 = "http://10.24.9.6:8080/sigem_files/" + photo;
                                     urlcontact2 = "http://www.ocrm.gob.pe/sigem_files/" + photo;
+                                    usernamemessage2 = alias;
                                     Glide.with(getContext())
                                             .load(urlcontact2)
                                             .crossFade()
@@ -258,6 +276,7 @@ public class ContactosFragment extends Fragment {
                                 } else if (i == 2) {
                                     //urlcontact3 = "http://10.24.9.6:8080/sigem_files/" + photo;
                                     urlcontact3 = "http://www.ocrm.gob.pe/sigem_files/" + photo;
+                                    usernamemessage3 = alias;
                                     Glide.with(getContext())
                                             .load(urlcontact3)
                                             .crossFade()
@@ -266,6 +285,7 @@ public class ContactosFragment extends Fragment {
                                 } else if (i == 4) {
                                     //urlcontact4 = "http://10.24.9.6:8080/sigem_files/" + photo;
                                     urlcontact4 = "http://www.ocrm.gob.pe/sigem_files/" + photo;
+                                    usernamemessage4 = alias;
                                     Glide.with(getContext())
                                             .load(urlcontact4)
                                             .crossFade()
@@ -274,6 +294,7 @@ public class ContactosFragment extends Fragment {
                                 } else if (i == 5) {
                                     //urlcontact5 = "http://10.24.9.6:8080/sigem_files/" + photo;
                                     urlcontact5 = "http://www.ocrm.gob.pe/sigem_files/" + photo;
+                                    usernamemessage5 = alias;
                                     Glide.with(getContext())
                                             .load(urlcontact5)
                                             .crossFade()
