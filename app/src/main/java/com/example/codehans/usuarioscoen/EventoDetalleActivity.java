@@ -66,6 +66,7 @@ public class EventoDetalleActivity extends AppCompatActivity implements OnMapRea
 
     private String URL_EVENTOS_USER_FUNCIONARIO = "http://www.ocrm.gob.pe/sigem/api/eventoByFuncionario";
     private String URL_EVENTOS_USER_CIUDADANO = "http://www.ocrm.gob.pe/sigem/api/eventoByCiudadano";
+    private String URL_CENTROS_ACOPIO_POR_EVENTO = "http://www.ocrm.gob.pe/sigem/api/centro-eventos-byidevento/";
 
     private GoogleMap mapa;
 
@@ -125,6 +126,7 @@ public class EventoDetalleActivity extends AppCompatActivity implements OnMapRea
         Toast.makeText(getApplicationContext(), "SHARED LONGITUD ES " + SHAREDLONGITUD, Toast.LENGTH_LONG).show();
 
         evento_detalle(idEvento);
+        ver_acopio_por_evento(idEvento);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -135,6 +137,58 @@ public class EventoDetalleActivity extends AppCompatActivity implements OnMapRea
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    private void ver_acopio_por_evento(String idEvento) {
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET, URL_CENTROS_ACOPIO_POR_EVENTO + "/" + idEvento, null,
+
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject jrJsonObject = response.getJSONObject(i);
+                                String idCentroAcopio = jrJsonObject.getString("idCentroAcopio");
+                                String latitud = jrJsonObject.getString("latitud");
+                                String longitud = jrJsonObject.getString("longitud");
+                                String entidad = jrJsonObject.getString("entidad");
+                                Double lat = Double.parseDouble(latitud);
+                                Double longit = Double.parseDouble(longitud);
+                                String tag = "-2";
+                                mapa.addMarker(new MarkerOptions().position(new LatLng(lat, longit)).title(idCentroAcopio).snippet(entidad).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_centro_ayuda))).setTag(tag);
+                            }
+                            //JSONObject jresponse = response.getJSONObject(0);
+                            //String descripcion = jresponse.getString("latitud");
+                            //Double latitud = Double.parseDouble(descripcion);
+                            //Log.d("DESCRIPCION", latitud + " size " + response.length());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("eRRor Response", "Error: " + error.toString());
+                Toast.makeText(getApplicationContext(), "ON RESPONSE" + error.toString(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("Authorization", "Bearer " + TOKEN);
+                return headers;
+            }
+        };
+
+        // Adding request to request queue
+        Volley.newRequestQueue(getApplicationContext()).add(jsonArrayRequest);
     }
 
 

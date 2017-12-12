@@ -116,6 +116,12 @@ public class LoginActivity extends AppCompatActivity {
                             editor.putString("TOKENSTRING", TOKEN);
                             editor.commit();
 
+                            SharedPreferences preferences = getSharedPreferences("USERSHAREFILE", MODE_PRIVATE);
+                            SharedPreferences.Editor editor1 = preferences.edit();
+                            editor1.putString("USERLOGIN", edtV_user.getText().toString());
+                            editor1.putString("PASSWORDLOGIN", edtV_password.getText().toString());
+                            editor1.commit();
+
                             Intent i = new Intent(LoginActivity.this, MainActivity.class);
                             i.putExtra("TOKENLOGIN", TOKEN);
                             startActivity(i);

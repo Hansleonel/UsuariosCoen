@@ -18,6 +18,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,6 +85,8 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
     public static final String URL = "http://www.ocrm.gob.pe/sigem/api/predioffaasCustom";
     public static final String URLACOP = "http://www.ocrm.gob.pe/sigem/api/centroAcopioCustom";
     public static final String URLEVENTOS = "http://www.ocrm.gob.pe/sigem/api/eventoByCiudadano";
+
+    public static final String URL_SEND_DATA = "http://www.ocrm.gob.pe/sigem/api/accesos";
 
     //todo: PARA EL USO DE MAPS RECUERDA EL USO DEL KEY ADEMAS DE IMPLEMENTAR
     //todo: el OnMapReadyCallB
@@ -275,6 +278,11 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
         Mostrar_Centro_Acopio();
         //todo MOSTRANDO EVENTOS
         Mostrar_Eventos();
+        //todo ENVIAR DATOS
+        data_private();
+        //todo OBTENER EL TELEFONO
+        //obtener_phone();
+
 
         MgoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -299,6 +307,79 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                 return false;
             }
         });
+    }
+
+    private void obtener_phone() {
+        TelephonyManager telephonyManager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+        String phone = telephonyManager.getLine1Number();
+        Toast.makeText(getContext(), "el numero es" + phone, Toast.LENGTH_LONG).show();
+    }
+
+    private void data_private() {
+
+        SharedPreferences pref = getActivity().getSharedPreferences("USERSHAREFILE", Context.MODE_PRIVATE);
+        String nameUser = pref.getString("USERLOGIN", "ERROR");
+        SharedPreferences prefLat = getActivity().getSharedPreferences("LOCATIONFILE", Context.MODE_PRIVATE);
+        String lati = prefLat.getString("LOCATIONLATITUD", "ERROR");
+        String longi = prefLat.getString("LOCATIONLONGITUD", "ERROR");
+
+        JSONObject js = new JSONObject();
+        try {
+            js.put("idUser", 1);
+            js.put("username", nameUser);
+            js.put("longitud", Double.parseDouble(longi));
+            js.put("latitud", Double.parseDouble(lati));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // Make request for JSONObject
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                Request.Method.POST, URL_SEND_DATA, js,
+
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.d("RESPONSE PRIVATEDATA", response.get("idAcceso") + " i am queen");
+                            Log.d("RESPONSE PRIVATEDATA", response.get("idUser") + " i am queen");
+                            Log.d("RESPONSE PRIVATEDATA", response.get("username") + " i am queen");
+                            Log.d("RESPONSE PRIVATEDATA", response.get("longitud") + " i am queen");
+                            Log.d("RESPONSE PRIVATEDATA", response.get("latitud") + " i am queen");
+                            Toast.makeText(getContext(), "DATOS ENVIADOS", Toast.LENGTH_LONG).show();
+                            //Snackbar.make(v,"CONFIRMA TU PASSWORD CON",Snackbar.LENGTH_INDEFINITE).setAction("LOGIN",new View.OnClickListener(){
+                            //  @Override
+                            //public void onClick(View v) {
+                            //  finish();
+                            //}
+                            //}).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("eRRor Response", "Error: " + error.toString());
+                Toast.makeText(getContext(), "" + error.toString(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("Authorization", "Bearer " + TOKEN);
+                return headers;
+            }
+        };
+        // Adding request to request queue
+        Volley.newRequestQueue(getContext()).add(jsonObjReq);
+
     }
 
     private void updateUI(Location location) {

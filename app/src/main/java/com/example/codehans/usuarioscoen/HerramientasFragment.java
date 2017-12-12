@@ -81,6 +81,34 @@ public class HerramientasFragment extends Fragment {
                 centerCrop().
                 crossFade().
                 into(imageView_h);
+
+        btnVer_t.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        btnVer_i.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        btnVer_ts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        btnVer_h.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
         return relativeLayout;
     }
+
 }
