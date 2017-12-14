@@ -32,6 +32,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
@@ -199,6 +200,18 @@ public class EventoDetalleActivity extends AppCompatActivity implements OnMapRea
         CameraUpdate camupd = CameraUpdateFactory.newLatLngZoom(new LatLng(-9.189967, -75.015152), 5);
         mapa.moveCamera(camupd);
         //evento_detalle(idEvento);
+
+        mapa.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if (marker.getTag().equals("-2")) {
+                    Intent i = new Intent(getApplicationContext(), CentroAcopioActivity.class);
+                    i.putExtra("idCentroAcopio", marker.getTitle());
+                    startActivity(i);
+                }
+                return false;
+            }
+        });
     }
 
     private void evento_detalle(final String evento) {

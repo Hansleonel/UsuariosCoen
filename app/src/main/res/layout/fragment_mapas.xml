@@ -7,11 +7,6 @@
     <!-- TODO: RECUERDA QUE CADA VEZ QUE MODIFIQUES EL TIPO DE LAYOUT
      TODO: DEBES DE CAMBIAR DICHO TIPO EN EL CODIGO -->
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/map_View"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <!--<EditText
         android:id="@+id/edtV_ver"
         android:layout_width="match_parent"
@@ -27,5 +22,10 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_mic_black_24dp"
         android:tint="@android:color/white" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/map_View"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </FrameLayout>

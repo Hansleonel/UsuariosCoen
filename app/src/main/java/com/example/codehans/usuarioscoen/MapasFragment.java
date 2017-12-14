@@ -52,11 +52,13 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.JsonObject;
+import com.karan.churi.PermissionManager.PermissionManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -106,6 +108,8 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
     String Latitud = "-12.066377";
     String Longitud = "-77.040867";
 
+    PermissionManager permission;
+
     AIService aiService;
 
     @Override
@@ -113,6 +117,12 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_mapas, container, false);
+
+        //todo Muestra
+        permission = new PermissionManager() {
+        };
+        permission.checkAndRequestPermissions(getActivity());
+        //todo /Muestra
 
         //todo RECUPERANDO TOKEN
         SharedPreferences pref = getActivity().getSharedPreferences("TOKENSHAREFILE", Context.MODE_PRIVATE);
@@ -249,7 +259,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
         MgoogleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         //googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.style_json));
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+        /*if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             MgoogleMap.setMyLocationEnabled(true);
         } else {
@@ -264,10 +274,14 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         LOCATION_REQUEST_CODE);
             }
-        }
+        } */
+
+        permission.checkAndRequestPermissions(getActivity());
         //todo:USADO PARA EL ZOOM Y UBICACION DE LA REGION O LOCALIZACION
         CameraUpdate camupd = CameraUpdateFactory.newLatLngZoom(new LatLng(-12.0431800, -77.0282400), 12);
         MgoogleMap.moveCamera(camupd);
+
+
         //todo:AGREGAR MARCADORES Y PERSONALIZARLOS
         //todo:PODEMOS AGRUPAR MARKERS POR CANTIDAD DENTRO DE UNA ZONA
         //MgoogleMap.addMarker(new MarkerOptions().position(new LatLng(-12.046373, -71.042754)).title("Lima"));
@@ -281,7 +295,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
         //todo ENVIAR DATOS
         data_private();
         //todo OBTENER EL TELEFONO
-        //obtener_phone();
+        obtener_phone();
 
 
         MgoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -312,7 +326,12 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
     private void obtener_phone() {
         TelephonyManager telephonyManager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
         String phone = telephonyManager.getLine1Number();
-        Toast.makeText(getContext(), "el numero es" + phone, Toast.LENGTH_LONG).show();
+        String suscribe = telephonyManager.getSubscriberId();
+        String a = " ";
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            a = telephonyManager.getAllCellInfo().toString();
+        }
+        //Toast.makeText(getContext(), "el numero es" + phone + suscribe + a, Toast.LENGTH_LONG).show();
     }
 
     private void data_private() {
@@ -515,7 +534,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == LOCATION_REQUEST_CODE) {
+        /*if (requestCode == LOCATION_REQUEST_CODE) {
             // ¿Permisos asignados?
             if (permissions.length > 0 &&
                     permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION) &&
@@ -544,7 +563,13 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
 
                 Log.e("ON PERMISOS", "Permiso denegado");
             }
-        }
+        }*/
+        //todo Muestra
+        permission.checkResult(requestCode, permissions, grantResults);
+        ArrayList<String> granted = permission.getStatus().get(0).granted;
+        ArrayList<String> denied = permission.getStatus().get(0).denied;
+        //todo /Muestra
+
     }
 
     @Override
