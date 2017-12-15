@@ -38,4 +38,6 @@
     <string name="url_public">http://www.ocrm.gob.pe/sigem/api/</string>
     <string name="title_activity_evento_detalle">EventoDetalleActivity</string>
     <string name="title_activity_centro_acopio">CentroAcopioActivity</string>
+    <string name="title_activity_how_help">HowHelpActivity</string>
+    <string name="title_activity_ranking_empresas">RankingEmpresasActivity</string>
 </resources>

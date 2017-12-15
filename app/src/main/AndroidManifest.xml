@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -63,6 +63,14 @@
         <activity
             android:name=".CentroAcopioActivity"
             android:label="@string/title_activity_centro_acopio"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".HowHelpActivity"
+            android:label="@string/title_activity_how_help"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RankingEmpresasActivity"
+            android:label="@string/title_activity_ranking_empresas"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
