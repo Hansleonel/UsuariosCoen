@@ -295,7 +295,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
         //todo ENVIAR DATOS
         data_private();
         //todo OBTENER EL TELEFONO
-        obtener_phone();
+        //obtener_phone();
 
 
         MgoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -482,7 +482,7 @@ public class MapasFragment extends Fragment implements OnMapReadyCallback, AILis
         //todo Para los JSONARRAY usamos este metodo
         //todo Verificar que no es igual al metodo de alerta donde solo se obtiene como respuesta un Jsonobjet
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET, URL, null,
+                Request.Method.GET, URL + "/T", null,
 
                 new Response.Listener<JSONArray>() {
                     @Override

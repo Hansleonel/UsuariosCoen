@@ -13,6 +13,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -56,6 +58,17 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".AddContactosActivity" />
         <activity android:name=".PerfilActivity" />
+        <activity android:name=".CallScreenActivity" />
+        <activity
+            android:name=".IncomingCallScreenActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PlaceCallActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".LoginActivityC" />
+
+        <service android:name=".SinchService" />
+
         <activity
             android:name=".EventoDetalleActivity"
             android:label="@string/title_activity_evento_detalle"
@@ -71,6 +84,10 @@
         <activity
             android:name=".RankingEmpresasActivity"
             android:label="@string/title_activity_ranking_empresas"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".LiveStreamingActivity"
+            android:label="@string/title_activity_live_streaming"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

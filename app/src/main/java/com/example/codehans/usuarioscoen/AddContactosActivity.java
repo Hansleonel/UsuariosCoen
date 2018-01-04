@@ -36,6 +36,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -100,7 +101,7 @@ public class AddContactosActivity extends AppCompatActivity {
 
         SharedPreferences pref = getApplication().getSharedPreferences("TOKENSHAREFILE", Context.MODE_PRIVATE);
         TOKEN = pref.getString("TOKENSTRING", "ERROR");
-        Toast.makeText(getApplicationContext(), " ESTE ES EL TOKEN " + TOKEN, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), " ESTE ES EL TOKEN " + TOKEN, Toast.LENGTH_LONG).show();
     }
 
     private void permisos() {
@@ -208,7 +209,7 @@ public class AddContactosActivity extends AppCompatActivity {
 
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos);
         byte[] imageBytes = baos.toByteArray();
         final String imageString = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
         Log.d("IMAGE", "registrar_contacto: " + imageString);
@@ -234,6 +235,7 @@ public class AddContactosActivity extends AppCompatActivity {
                             progressDialog.dismiss();
                             Log.d("RESPONSE CORRECTO", response.get("idContacto") + " i am queen");
                             Toast.makeText(getApplicationContext(), "Contacto Agregado", Toast.LENGTH_LONG).show();
+                            finish();
                             //Snackbar.make(v,"CONFIRMA TU PASSWORD CON",Snackbar.LENGTH_INDEFINITE).setAction("LOGIN",new View.OnClickListener(){
                             //  @Override
                             //public void onClick(View v) {
@@ -335,10 +337,15 @@ public class AddContactosActivity extends AppCompatActivity {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
 
                         //Setting image to ImageView
+                        //Glide.with(getApplicationContext())
+                        //        .load(bitmap)
+                        //        .crossFade()
+                        //        .centerCrop()
+                        //        .into(imageView_contacto);
                         imageView_contacto.setImageBitmap(bitmap);
 
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos);
                         byte[] imageBytes = baos.toByteArray();
                         final String imageString = Base64.encodeToString(imageBytes, Base64.URL_SAFE);
 

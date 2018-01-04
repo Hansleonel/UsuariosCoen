@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -96,6 +97,9 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
     private String numeroEnvioAsincTask = " ";
     private String aliasEnvioAsincTask = " ";
 
+    private List<String> e;
+    private String tipoE = "0";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -104,8 +108,9 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
         //todo uso de sharedpreference para la recuperacion del token
         SharedPreferences pref = getActivity().getSharedPreferences("TOKENSHAREFILE", Context.MODE_PRIVATE);
         TOKEN = pref.getString("TOKENSTRING", "ERROR");
+        e = new ArrayList<>();
 
-        //tipos_eventos();
+        tipos_eventos();
         permisos();
         Calendar c = Calendar.getInstance();
         SimpleDateFormat nformat = new SimpleDateFormat("dd-MM-yyyy");
@@ -117,12 +122,26 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
         spinner_tipoE = (Spinner) relativeLayout.findViewById(R.id.cmbx_TipoE);
         //spinner_tipoC = (Spinner) relativeLayout.findViewById(R.id.cmbx_TipoC);
         btn_alert = (Button) relativeLayout.findViewById(R.id.btn_accept_alert);
+
+        spinner_tipoE.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                tipoE = (String) parent.getItemAtPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                tipoE = "Terremoto";
+            }
+        });
+
+
         btn_alert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Intent i = new Intent(getContext(), ReceiptActivity.class);
                 //startActivity(i);
-                envio_reporte_alerta(v);
+                envio_reporte_alerta(v, tipoE);
                 //enviar_sms("992890929","Anny");
                 //SendSmsAsyncTask a = new SendSmsAsyncTask();
                 //a.execute();
@@ -130,10 +149,9 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
         });
 
 
-
         String[] emergency = new String[]{"TIPO EVENTO 1", "TIPO EVENTO 2", "TIPO EVENTO 3", "TIPO EVENTO 4"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, emergency);
-        spinner_tipoE.setAdapter(adapter);
+        //spinner_tipoE.setAdapter(adapter);
 
         //String[] concecuency = new String[]{"Puente Caido","Colegio Colapsado","Plaza Inundada"};
         //ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_dropdown_item,concecuency);
@@ -158,10 +176,14 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
                         try {
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject jrJsonObject = response.getJSONObject(i);
-                                String latitud = jrJsonObject.getString("latitud");
+                                String descripcion = jrJsonObject.getString("descripcion");
 
+                                e.add(descripcion);
 
                             }
+                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, e);
+
+                            spinner_tipoE.setAdapter(adapter);
                             //JSONObject jresponse = response.getJSONObject(0);
                             //String descripcion = jresponse.getString("latitud");
                             //Double latitud = Double.parseDouble(descripcion);
@@ -195,7 +217,7 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
         Volley.newRequestQueue(getContext()).add(jsonArrayRequest);
     }
 
-    private void envio_reporte_alerta(final View v) {
+    private void envio_reporte_alerta(final View v, final String TipoE) {
 
         String message = editText_message.getText().toString();
         String lugar = editText_ubicacion.getText().toString();
@@ -208,7 +230,7 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
             jsTipoEvento.put("createdDate", "2017-09-29T15:27:25Z");
             jsTipoEvento.put("estado", "ACTIVO");
             jsTipoEvento.put("idTipoEvento", 1);
-            jsTipoEvento.put("descripcion", "TIPO EVENTO 1");
+            jsTipoEvento.put("descripcion", TipoE);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -237,6 +259,8 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
                             Log.d("RESPONSE CORRECTO", response.get("idRepCiudadano") + " i am queen");
                             Toast.makeText(getContext(), "LA ALERTA HA SIDO ENVIADA", Toast.LENGTH_LONG).show();
                             enviar_mensajes_contactos();
+                            Toast.makeText(getContext(), " " + TipoE, Toast.LENGTH_LONG).show();
+                            editText_message.setText("");
                             //Snackbar.make(v,"CONFIRMA TU PASSWORD CON",Snackbar.LENGTH_INDEFINITE).setAction("LOGIN",new View.OnClickListener(){
                             //  @Override
                             //public void onClick(View v) {
@@ -343,7 +367,7 @@ public class NuevaAlertaFragment extends Fragment implements GoogleApiClient.OnC
     private void enviar_sms(String numero, String alias) {
         String nombre_contacto = alias;
         String numero_contacto = numero;
-        String mensaje = "Hola" + nombre_contacto + " NUEVO FORMATO DE ENVIO DE MENSAJE";
+        String mensaje = "Hola" + nombre_contacto + " EH ENVIADO UNA NUEVA ALERTA DESDE ";
 
 
         try {

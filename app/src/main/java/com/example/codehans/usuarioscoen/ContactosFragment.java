@@ -282,7 +282,7 @@ public class ContactosFragment extends Fragment {
                                             .crossFade()
                                             .centerCrop()
                                             .into(contact03);
-                                } else if (i == 4) {
+                                } else if (i == 3) {
                                     //urlcontact4 = "http://10.24.9.6:8080/sigem_files/" + photo;
                                     urlcontact4 = "http://www.ocrm.gob.pe/sigem_files/" + photo;
                                     usernamemessage4 = alias;
@@ -291,7 +291,7 @@ public class ContactosFragment extends Fragment {
                                             .crossFade()
                                             .centerCrop()
                                             .into(contact04);
-                                } else if (i == 5) {
+                                } else if (i == 4) {
                                     //urlcontact5 = "http://10.24.9.6:8080/sigem_files/" + photo;
                                     urlcontact5 = "http://www.ocrm.gob.pe/sigem_files/" + photo;
                                     usernamemessage5 = alias;

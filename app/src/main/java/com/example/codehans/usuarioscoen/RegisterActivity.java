@@ -1,5 +1,6 @@
 package com.example.codehans.usuarioscoen;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +42,8 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText edtV_user, edtV_numero, edtV_DNI, edtV_mail, edtV_Password;
     private Button btn_registrar;
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,10 +59,18 @@ public class RegisterActivity extends AppCompatActivity {
         btn_registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showProgressD();
                 registrar_user(v);
             }
         });
 
+    }
+
+    private void showProgressD() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("RENIEC");
+        progressDialog.setMessage("Comparando Datos Reniec");
+        progressDialog.show();
     }
 
     private void registrar_user(final View v) {
@@ -76,7 +87,7 @@ public class RegisterActivity extends AppCompatActivity {
         String mes = parts[1];
         String anho = parts[2];
 
-        nacimiento_formato_register = anho+"-"+mes+"-"+dia;
+        nacimiento_formato_register = anho + "-" + mes + "-" + dia;
 
         final String[] idUser = {" "};
         final String[] userName = {" "};
@@ -118,6 +129,7 @@ public class RegisterActivity extends AppCompatActivity {
                             Log.d("NRO CELULAR", "onResponse: " + nroCelular[0]);
                             //Log.d("EMAIL", "onResponse: " + email[0]);
                             Log.d("Register", "onResponse: " + response);
+                            progressDialog.dismiss();
                             Toast.makeText(RegisterActivity.this, "USUARIO REGISTRADO", Toast.LENGTH_LONG).show();
                             //Snackbar.make(v, "CONFIRMA TU PASSWORD CON TU MAIL", Snackbar.LENGTH_INDEFINITE).setAction("LOGIN", new View.OnClickListener() {
                             //   @Override
@@ -139,6 +151,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
                 VolleyLog.d("EEEEEE", "Error: " + error.toString());
                 Toast.makeText(RegisterActivity.this, "" + error, Toast.LENGTH_LONG).show();
             }
